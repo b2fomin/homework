@@ -23,7 +23,7 @@ int main()
 
 	if (D < 0) cout << "There is no solution";
 	else if (D == 0) cout << "There is one solution: x = " << -b / (2 * a);
-	else cout << "There are two solutions: x1 = " << (-b + D) / (2 * a) << "; x2 = " << (-b - D) / (2 * a);
+	else cout << "There are two solutions: x1 = " << (-b + pow(D, 0.5)) / (2 * a) << "; x2 = " << (-b - pow(D, 0.5)) / (2 * a);
 	
 	return 0;
 }

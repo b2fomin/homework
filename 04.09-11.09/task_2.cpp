@@ -7,7 +7,7 @@ int main()
 {
 	using namespace std;
 
-	cout << "What would you like to convert (input number)?" << endl;
+	cout << "What would you like to convert (enter number)?" << endl;
 	cout << "lenght (m) --- 1" << endl;
 	cout << "mass (kg) --- 2" << endl;
 	cout << "time (s) --- 3" << endl;

@@ -12,7 +12,7 @@ int main()
 	{
 		if (b == 0)
 		{
-			if (c == 0) cout << "There are infinite solutions";
+			if (c == 0) cout << "There are infinite number of solutions";
 			else cout << "There is no solution";
 		}
 		else cout << "There is one solution: x = " << -c / b;

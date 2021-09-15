@@ -1,5 +1,19 @@
 #include <iostream>
 #include <vector>
+#include <iomanip>
+
+bool bin_search(std::vector<int>& arr, int& value)
+{
+	int left = 0, right = arr.size(), current = 0;
+	while (right - left > 1)
+	{
+		current = (left + right) / 2;
+		if (arr[current] > value) right = current;
+		else left = current;
+	}
+	if (arr[left] == value || arr[right] == value) return true;
+	return false;
+}
 
 int main()
 {
@@ -18,6 +32,8 @@ int main()
 	cout << "Enter number you want to find: ";
 	int value;
 	cin >> value;
+	cout << boolalpha << bin_search(arr, value);
+
 	return 0;
 
 }

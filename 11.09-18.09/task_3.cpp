@@ -15,7 +15,9 @@ int main()
 	{
 		cin >> arr[i];
 	}
-
+	cout << "Enter number you want to find: ";
+	int value;
+	cin >> value;
 	return 0;
 
 }

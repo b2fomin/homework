@@ -4,7 +4,7 @@
 using namespace std;
 tuple<int*, int> lcs(int* arr1, int* arr2, int size1, int size2)
 {
-	int** d = new int* [size1]; // in [i][j] position is lenght of longest common subsequence 1st element of is arr1[i] and the last element of is arr2[j] 
+	int** d = new int* [size1]; // in [i][j] position is lenght of longest common subsequence for arr1's i first elements and arr2's j first elements 
 	for (int i = 0; i < size1; i++) {
 		d[i] = new int[size2];
 		for (int j = 0; j < size2; j++) {
@@ -34,16 +34,14 @@ tuple<int*, int> lcs(int* arr1, int* arr2, int size1, int size2)
 			if (d[i][j] > max_lenght)
 			{
 				max_lenght = d[i][j];
-				(size1>size2) ? pos = i : pos = j;
+				pos = i;
 			}
 		}
 	}
 	int* result = new int[max_lenght];
-	int* arr;
-	(size1 > size2) ? arr = arr2 : arr = arr1;
 	for (int i = max_lenght - 1; i >= 0; i--) {
-		for (int j = 0; j < min(size1, size2); j++) {
-			if ((size1>size2) ? d[pos][j] == i + 1 : d[j][pos] == i + 1 && (i + 1 == max_lenght || arr[j] <= result[i + 1])) result[i] = max(arr[j], result[i]);
+		for (int j = 0; j < size2; j++) {
+			if (d[pos][j] == i + 1) { result[i] = arr2[j]; break; }
 		}
 	}
 

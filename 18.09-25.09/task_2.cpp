@@ -25,6 +25,15 @@ void merge(vector<int>& arr, int left, int middle, int right)
 	}
 }
 
+void merge_sort(vector<int>& arr, int left, int right)
+{
+	if (right - left < 2) return;
+	int middle = (left + right) / 2;
+	merge_sort(arr, left, middle);
+	merge_sort(arr, middle, right);
+	merge(arr, left, middle, right);
+}
+
 int main()
 {
 	cout << "Put your array here (put any symbol is not a digit to finish):" << endl;
@@ -38,6 +47,7 @@ int main()
 	}
 	arr.pop_back();
 
+	merge_sort(arr,0,arr.size());
 
 	for (int i = 0; i < arr.size(); i++) cout << arr[i] << '\t';
 

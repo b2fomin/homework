@@ -10,7 +10,7 @@ void switch_numbers(int& a, int& b)
 	a -= b;
 }
 
-void merge(vector<int>& arr, int left, int middle, int right)
+void merge(vector<int>& arr, int left, int middle, int right) // middle - boundary between two arrays to merge
 {
 	int current_1 = left, current_2 = middle;
 	while (current_1 < current_2 && current_2 < right )
@@ -25,7 +25,7 @@ void merge(vector<int>& arr, int left, int middle, int right)
 	}
 }
 
-void merge_sort(vector<int>& arr, int left, int right)
+void merge_sort(vector<int>& arr, int left, int right) // left and right - boundaries of part of array to sort
 {
 	if (right - left < 2) return;
 	int middle = (left + right) / 2;

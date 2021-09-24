@@ -22,7 +22,12 @@ int main()
 	double x, y;
 	cin >> x >> y;
 	
-	for (int i = 0; i < functions.size(); i++) cout << "Result of function number " << i << " is " << calculate(x, y, functions[i]) << endl;
+	for (auto elem : functions)
+	{
+		static int i = 1;
+		cout << "Result of function number " << i << " is " << calculate(x, y, elem) << endl;
+		i++;
+	}
 
 	return 0;
 }

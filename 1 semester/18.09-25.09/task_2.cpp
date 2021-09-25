@@ -3,21 +3,14 @@
 
 using namespace std;
 
-void switch_numbers(int& a, int& b)
-{
-	a += b;
-	b = a - b;
-	a -= b;
-}
-
 void merge(vector<int>& arr, int left, int middle, int right) // middle - boundary between two arrays to merge
 {
 	int current_1 = left, current_2 = middle;
-	while (current_1 < current_2 && current_2 < right )
+	while (current_1 < current_2 && current_2 < right)
 	{
 		if (arr[current_2] < arr[current_1])
 		{
-			for (int i = middle; i > current_1; i--) switch_numbers(arr[i], arr[i - 1]);
+			for (int i = middle; i > current_1; i--) swap(arr[i], arr[i - 1]);
 			middle++;
 			current_2++;
 		}
@@ -47,9 +40,9 @@ int main()
 	}
 	arr.pop_back();
 
-	merge_sort(arr,0,arr.size());
+	merge_sort(arr, 0, arr.size());
 
-	for (int i = 0; i < arr.size(); i++) cout << arr[i] << '\t';
+	for (auto elem : arr) cout << elem << '\t';
 
 	return 0;
 }

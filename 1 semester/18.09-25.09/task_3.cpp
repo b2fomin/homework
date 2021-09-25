@@ -4,7 +4,7 @@
 
 void print(std::vector<int> arr)
 {
-	for (int i = 0; i < arr.size(); i++) std::cout << arr[i] << '\t';
+	for (auto elem : arr) std::cout << elem << '\t';
 	std::cout << std::endl;
 }
 
@@ -17,7 +17,7 @@ int main()
 	cin >> size;
 	cout << "Put your array here:" << endl;
 	vector<int> arr(size);
-	for (int i = 0; i < size; i++) { cin >> arr[i]; }
+	for (auto& elem:arr) { cin >> elem; }
 
 	sort(arr.begin(), arr.end(), [](auto& x, auto& y) {return (x < y); });//ascending
 	print(arr);

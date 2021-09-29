@@ -12,11 +12,9 @@ public:
 	int month;
 	int year;
 
-	Date(int day = 0, int month = 0, int year = 0)
+	Date(int day = 0, int month = 0, int year = 0) : year(year), month(month), day(day)
 	{
-		this->year = year;
-		this->month = month;
-		this->day = day;
+
 	}
 
 	void print()
@@ -58,6 +56,6 @@ int main()
 	Date tomorrow{ 30,9,2021 };
 	Date yesterday{ 28,9,2021 };
 	(today + tomorrow).print();
-	cout << endl << boolalpha << (today < tomorrow) << " " << (today==today) << " " << (today<yesterday) << endl;
+	cout << endl << boolalpha << (today < tomorrow) << " " << (today == today) << " " << (today < yesterday) << endl;
 	return 0;
 }

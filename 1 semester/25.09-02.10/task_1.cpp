@@ -21,6 +21,13 @@ struct Date
 	{
 		cout << setw(2) << day << '.' << setw(2) << setfill('0') << month << '.' << year % 100;
 	}
+
+	Date& operator=(const Date& other)
+	{
+		year = other.year;
+		month = other.month;
+		day = other.day;
+	}
 };
 
 int main()

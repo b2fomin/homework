@@ -21,7 +21,7 @@ public:
 
 	void print()
 	{
-		cout << setw(2) << day << '.' << setw(2) << setfill('0') << month << '.' << year % 100;
+		cout << setw(2) << day << '.' << setw(2) << setfill('0') << month << '.' << setw(2) << setfill('0') << year % 100;
 	}
 
 	Date& operator=(const Date& other)

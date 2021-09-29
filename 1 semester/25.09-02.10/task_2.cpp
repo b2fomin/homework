@@ -9,9 +9,9 @@ struct Lesson
 	std::string name;
 	std::vector<Student*> students;
 
-	Lesson(std::string name)
+	Lesson(std::string name) : name(name)
 	{
-		this->name = name;
+
 	}
 
 	friend std::ostream& operator<<(std::ostream& out, const Lesson& lesson);
@@ -27,9 +27,9 @@ struct Student
 	std::string name;
 	std::vector<Lesson*> lessons;
 
-	Student(std::string name)
+	Student(std::string name) :name(name)
 	{
-		this->name = name;
+
 	}
 
 	friend std::ostream& operator<<(std::ostream& out, const Student& student);
@@ -66,7 +66,7 @@ int main()
 	for (auto& elem : Lessons)
 	{
 		static int i = 0;
-		elem.students.push_back(&Students[i<Students.size()?i:0]);
+		elem.students.push_back(&Students[i < Students.size() ? i : 0]);
 		elem.students.push_back(&Students[++i < Students.size() ? i : 0]);
 	}
 
@@ -77,7 +77,7 @@ int main()
 		elem.lessons.push_back(&Lessons[++i < Students.size() ? i : 0]);
 	}
 
-	for (auto& elem:Students) print(elem.lessons);
+	for (auto& elem : Students) print(elem.lessons);
 	std::cout << std::endl;
 	for (auto& elem : Lessons) print(elem.students);
 	std::cout << std::endl;

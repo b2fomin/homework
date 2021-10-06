@@ -20,3 +20,7 @@ void Date::set_day(int day)
 	if (0 < day <= month_duration[month]) this->day = day;
 	else throw "Invalid day number";
 }
+
+int Date::get_day() const { return day; };
+int Date::get_month() const { return month; };
+int Date::get_year() const { return year; };

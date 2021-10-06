@@ -24,3 +24,30 @@ void Date::set_day(int day)
 int Date::get_day() const { return day; };
 int Date::get_month() const { return month; };
 int Date::get_year() const { return year; };
+
+Date& Date::operator=(const Date& other)
+{
+	year = other.year;
+	month = other.month;
+	day = other.day;
+}
+
+Date Date::operator+(const Date& other)
+{
+	Date new_date;
+	new_date.day = day + other.day;
+
+	int duration = month_duration[std::max(month, other.month)];
+	new_date.month = month + other.month + new_date.day / duration;
+	new_date.day %= duration;
+
+	new_date.year = year + other.year + new_date.month / 12;
+	new_date.month %= 12;
+	return new_date;
+}
+
+bool Date::operator==(const Date& other) { return (year == other.year && month == other.month && day == other.day); };
+
+bool Date::operator<(const Date& other) { return (year < other.year || month < other.month || day < other.day); };
+
+bool Date::operator>(const Date& other) { return (year > other.year || month > other.month || day > other.day); };

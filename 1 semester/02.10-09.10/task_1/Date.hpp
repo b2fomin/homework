@@ -11,7 +11,6 @@ class Date
 	int year;
 
 public:
-	Date();
 	
 	void set_day(int);
 	void set_month(int);
@@ -20,6 +19,8 @@ public:
 	int get_day() const;
 	int get_month() const;
 	int get_year() const;
+
+	Date(int, int, int);
 
 	friend std::ostream operator<<(std::ostream&, const Date&);
 	friend std::istream operator>>(std::istream, const Date&);

@@ -5,7 +5,7 @@
 
 class Date
 {
-	const int month_duration[12];
+	static const int month_duration[12];
 	int day;
 	int month;
 	int year;

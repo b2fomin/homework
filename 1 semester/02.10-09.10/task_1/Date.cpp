@@ -1,7 +1,8 @@
 #include "Date.hpp"
 
+const int Date::month_duration[12]{ 31,28,31,30,31,30,31,31,30,31,30,31 };
 
-Date::Date(int day = 1, int month = 1, int year = 1) :month_duration{ 31,28,31,30,31,30,31,31,30,31,30,31 }
+Date::Date(int day = 1, int month = 1, int year = 1)
 {
 	set_year(year);
 	set_month(month);

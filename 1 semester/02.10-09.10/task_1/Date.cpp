@@ -1,7 +1,7 @@
 #include "Date.hpp"
 
 
-Date::Date(int year = 1, int month = 1, int day = 1) :month_duration{ 31,28,31,30,31,30,31,31,30,31,30,31 }
+Date::Date(int day = 1, int month = 1, int year = 1) :month_duration{ 31,28,31,30,31,30,31,31,30,31,30,31 }
 {
 	set_year(year);
 	set_month(month);
@@ -29,6 +29,7 @@ Date& Date::operator=(const Date& other)
 	year = other.year;
 	month = other.month;
 	day = other.day;
+	return *this;
 }
 
 Date Date::operator+(const Date& other)
@@ -53,7 +54,7 @@ bool Date::operator>(const Date& other) { return (year > other.year || month > o
 
 std::ostream& operator<<(std::ostream& out, const Date& date)
 {
-	out << std::setw(2) << date.day << '.' << std::setw(2) << std::setfill('0') << date.month << '.' << std::setw(2) << std::setfill('0');
+	out << std::setw(2) << date.day << '.' << std::setw(2) << std::setfill('0') << date.month << '.';
 	if (date.year < 0) out << -date.year << " BC";
 	else out << date.year;
 	return out;

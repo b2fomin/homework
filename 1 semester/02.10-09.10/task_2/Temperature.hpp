@@ -14,7 +14,7 @@ class Temperature
 		converter Reamur;
 	};
 public:
-	static Coefficients coefficients;
+	static const Coefficients coefficients;
 	void set_value(double, converter);
 	double get_value(converter) const;
 	Temperature(double);

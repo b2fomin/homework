@@ -1,6 +1,6 @@
 #include"Temperature.hpp"
 
-Temperature::Coefficients Temperature::coefficients
+const Temperature::Coefficients Temperature::coefficients
 {
 	[](double value) { return value + 273.15; },
 	[](double value) { return 1.8 * value + 32; },

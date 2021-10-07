@@ -4,7 +4,7 @@
 
 namespace temperature
 {
-	typedef std::function<double(double)> converter;
+	using converter = std::function<double(double)>;
 
 	class Temperature
 	{

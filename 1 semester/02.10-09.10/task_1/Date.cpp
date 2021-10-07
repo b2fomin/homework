@@ -38,7 +38,7 @@ Date Date::operator+(const Date& other)
 	Date new_date;
 	new_date.day = day + other.day;
 
-	int duration = month_duration[std::max(month, other.month)];
+	int duration = month_duration[std::max(month, other.month)] + 1;
 	new_date.month = month + other.month + new_date.day / duration;
 	new_date.day %= duration;
 
@@ -61,7 +61,7 @@ std::ostream& operator<<(std::ostream& out, const Date& date)
 	return out;
 }
 
-std::istream& operator>>(std::istream& in, const Date& date)//input format is day.month.year
+std::istream& operator>>(std::istream& in, Date& date)//input format is day.month.year
 {
 	std::string answer;
 	in >> answer;
@@ -70,18 +70,21 @@ std::istream& operator>>(std::istream& in, const Date& date)//input format is da
 	for (auto& field : fields)
 	{
 		std::string current = "";
-		
+
 		for (auto& elem : answer)
 		{
 			if (elem != '.') current += elem;
 			else
 			{
-				answer.erase(answer.begin() + current.size() + 1);
+				answer.erase(answer.begin(), answer.begin() + current.size() + 1);
 				break;
 			}
 		}
 
 		field = std::stoi(current);
 	}
+	date.day = fields[0];
+	date.month = fields[1];
+	date.year = fields[2];
 	return in;
 }

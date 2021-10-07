@@ -23,7 +23,7 @@ public:
 	Date(int, int, int);
 
 	friend std::ostream& operator<<(std::ostream&, const Date&);
-	friend std::istream& operator>>(std::istream&, const Date&);
+	friend std::istream& operator>>(std::istream&, Date&);
 	
 	Date& operator=(const Date&);
 	Date operator+(const Date&);

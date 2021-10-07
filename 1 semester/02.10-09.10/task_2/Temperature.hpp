@@ -2,20 +2,23 @@
 #include<iostream>
 #include<functional>
 
-typedef std::function<double(double)> converter;
-
-class Temperature
+namespace temperature
 {
-	double value;
-	const struct Coefficients
+	typedef std::function<double(double)> converter;
+
+	class Temperature
 	{
-		converter Kelvin;
-		converter Fahrenheit;
-		converter Reamur;
+		double value;
+		const struct Coefficients
+		{
+			converter Kelvin;
+			converter Fahrenheit;
+			converter Reamur;
+		};
+	public:
+		static const Coefficients coefficients;
+		void set_value(double, converter);
+		double get_value(converter) const;
+		Temperature(double);
 	};
-public:
-	static const Coefficients coefficients;
-	void set_value(double, converter);
-	double get_value(converter) const;
-	Temperature(double);
-};
+}

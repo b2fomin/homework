@@ -20,7 +20,7 @@ public:
 		throw "No access";
 	}
 
-	double access_weight(std::string function)
+	double& access_weight(std::string function)
 	{
 		for (auto& elem : permissions_name)
 		{

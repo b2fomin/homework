@@ -10,7 +10,7 @@ private:
 	int size;
 	std::vector<int> arr;
 public:
-	Array(int size);
+	Array(int size=0);
 	~Array();
 	Array(const Array& other);
 	Array(Array&& other);

@@ -148,3 +148,29 @@ Fraction Fraction::operator/=(const Fraction& other)
 {
 	return operator/(*this, other);
 }
+
+Fraction Fraction::operator++()
+{
+	numerator += denominator;
+	return *this;
+}
+
+Fraction Fraction::operator--()
+{
+	numerator -= denominator;
+	return *this;
+}
+
+Fraction Fraction::operator++(int)
+{
+	Fraction old_fraction{ numerator,denominator };
+	numerator += denominator;
+	return old_fraction;
+}
+
+Fraction Fraction::operator--(int)
+{
+	Fraction old_fraction{ numerator,denominator };
+	numerator -= denominator;
+	return old_fraction;
+}

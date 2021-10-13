@@ -29,6 +29,10 @@ public:
 	Fraction operator*=(const Fraction&);
 	Fraction operator-=(const Fraction&);
 	Fraction operator/=(const Fraction&);
+	Fraction operator++();
+	Fraction operator--();
+	Fraction operator++(int);
+	Fraction operator--(int);
 	friend bool operator==(const Fraction&, const Fraction&);
 	friend bool operator>(const Fraction&, const Fraction&);
 	friend bool operator<(const Fraction&, const Fraction&);

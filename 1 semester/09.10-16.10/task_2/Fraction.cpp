@@ -1,6 +1,9 @@
 #include "Fraction.hpp"
 
-Fraction::Fraction(int numerator, unsigned int denominator) :numerator(numerator), denominator(denominator) {};
+Fraction::Fraction(int numerator, unsigned int denominator) :numerator(numerator), denominator(denominator)
+{
+	reduce_fraction();
+};
 
 int Fraction::gcd(int number_1, int number_2)
 {
@@ -12,6 +15,11 @@ int Fraction::gcd(int number_1, int number_2)
 	}
 
 	return old_number_1 * old_number_2 / number_1;
+}
+
+int Fraction::lcm(int number_1, int number_2)
+{
+	return number_1 * number_2 / gcd(number_1, number_2);
 }
 
 void Fraction::reduce_fraction()
@@ -42,6 +50,7 @@ std::istream& operator>>(std::istream& in, Fraction& other) // input format: "nu
 	}
 
 	other.denominator = std::stoi(current);
+	other.reduce_fraction();
 
 	return in;
 }

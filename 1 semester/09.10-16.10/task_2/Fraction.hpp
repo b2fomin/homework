@@ -4,6 +4,9 @@
 
 class Fraction
 {
+public:
+	static int gcd(int, int);
+	static int lcm(int, int);
 private:
 	int numerator;
 	unsigned int denominator;
@@ -15,8 +18,6 @@ public:
 
 	int get_numerator() const;
 	int get_denominator() const;
-
-	static int gcd(int, int);
 
 	friend std::ostream& operator<<(std::ostream&, const Fraction&);
 	friend std::istream& operator>>(std::istream&, Fraction&);

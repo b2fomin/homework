@@ -174,3 +174,8 @@ Fraction Fraction::operator--(int)
 	numerator -= denominator;
 	return old_fraction;
 }
+
+Fraction::operator double()
+{
+	return (double)numerator / denominator;
+}

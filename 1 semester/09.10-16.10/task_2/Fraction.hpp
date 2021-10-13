@@ -19,6 +19,7 @@ public:
 	int get_numerator() const;
 	int get_denominator() const;
 
+	operator double();
 	friend std::ostream& operator<<(std::ostream&, const Fraction&);
 	friend std::istream& operator>>(std::istream&, Fraction&);
 	friend Fraction operator+(const Fraction&, const Fraction&);

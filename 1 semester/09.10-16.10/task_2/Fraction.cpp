@@ -134,3 +134,23 @@ bool operator>=(const Fraction& left, const Fraction& right)
 	int divident = Fraction::lcm(left.denominator, right.denominator);
 	return (left.numerator * divident / left.denominator >= right.numerator* divident / right.denominator);
 }
+
+Fraction Fraction::operator+=(const Fraction& other)
+{
+	return operator+(*this, other);
+}
+
+Fraction Fraction::operator*=(const Fraction& other)
+{
+	return operator*(*this, other);
+}
+
+Fraction Fraction::operator-=(const Fraction& other)
+{
+	return operator-(*this, other);
+}
+
+Fraction Fraction::operator/=(const Fraction& other)
+{
+	return operator/(*this, other);
+}

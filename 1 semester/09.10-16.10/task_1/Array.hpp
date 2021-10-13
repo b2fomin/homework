@@ -14,4 +14,5 @@ public:
 	~Array();
 	Array(const Array& other);
 	Array(Array&& other);
+	Array& operator=(const Array& other);
 };

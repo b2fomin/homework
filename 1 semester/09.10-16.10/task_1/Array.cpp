@@ -21,3 +21,15 @@ Array::Array(Array&& other) :size(other.size), arr(other.arr), data(other.data)
 {
 	other.data = nullptr;
 }
+
+Array& Array::operator=(const Array& other)
+{
+	if (&other == this) return *this;
+
+	delete[] data;
+	size = other.size;
+	arr = other.arr;
+	data = new int[size];
+	for (int i = 0; i < size; ++i) data[i] = other.data[i];
+	return *this;
+}

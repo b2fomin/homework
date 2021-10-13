@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include<vector>
+#include<utility>
 
 class Array
 {
@@ -23,4 +24,5 @@ public:
 	Array(Array&& other);
 	Array& operator=(const Array& other);
 	Array& operator=(Array&& other);
+	int& operator[](const int index);
 };

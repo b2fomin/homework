@@ -3,6 +3,7 @@
 Array::Array(int size, std::vector<int> arr) :size(size), arr(arr)
 {
 	data = new int[size];
+	for (int i = 0; i < size; ++i) data[i] = 0;
 }
 
 Array::~Array()
@@ -68,6 +69,11 @@ std::ostream& operator<<(std::ostream& out, const Array& other)
 	out << std::endl << "Data of array: ";
 	for (int i = 0; i < other.size; ++i) out << other.data[i] << '\t';
 	return out << std::endl;
+}
+
+int& Array::operator[](const int index)
+{
+	return data[index];
 }
 
 int Array::get_size() const { return size; };

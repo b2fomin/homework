@@ -55,7 +55,7 @@ std::istream& operator>>(std::istream& in, Fraction& other) // input format: "nu
 	return in;
 }
 
-Fraction operator+(Fraction& left, const Fraction& right)
+Fraction operator+(const Fraction& left, const Fraction& right)
 {
 	Fraction new_fraction;
 
@@ -64,6 +64,17 @@ Fraction operator+(Fraction& left, const Fraction& right)
 	new_fraction.numerator = left.numerator * dividend / left.denominator +
 							right.numerator * dividend / left.denominator;
 	
+	new_fraction.reduce_fraction();
+	return new_fraction;
+}
+
+Fraction operator*(const Fraction& left, const Fraction& right)
+{
+	Fraction new_fraction;
+
+	new_fraction.numerator = left.numerator * right.numerator;
+	new_fraction.denominator = left.denominator * right.denominator;
+
 	new_fraction.reduce_fraction();
 	return new_fraction;
 }

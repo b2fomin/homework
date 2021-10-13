@@ -5,3 +5,8 @@ Array::Array(int size):size(size)
 	data = new int[size];
 	arr.resize(size);
 }
+
+Array::~Array()
+{
+	delete[] data;
+}

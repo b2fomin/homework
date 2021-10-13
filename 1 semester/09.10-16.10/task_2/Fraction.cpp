@@ -62,11 +62,11 @@ Fraction operator+(const Fraction& left, const Fraction& right)
 {
 	Fraction new_fraction;
 
-	int dividend = Fraction::lcm(left.denominator,right.denominator);
+	int dividend = Fraction::lcm(left.denominator, right.denominator);
 	new_fraction.denominator = static_cast<unsigned int>(dividend);
 	new_fraction.numerator = left.numerator * dividend / left.denominator +
-							right.numerator * dividend / left.denominator;
-	
+		right.numerator * dividend / left.denominator;
+
 	new_fraction.reduce_fraction();
 	return new_fraction;
 }
@@ -104,4 +104,33 @@ Fraction operator/(const Fraction& left, const Fraction& right)
 
 	new_fraction.reduce_fraction();
 	return new_fraction;
+}
+
+bool operator==(const Fraction& left, const Fraction& right)
+{
+	return(left.numerator == right.numerator) && (left.denominator == right.denominator);
+}
+
+bool operator<(const Fraction& left, const Fraction& right)
+{
+	int divident = Fraction::lcm(left.denominator, right.denominator);
+	return (left.numerator * divident / left.denominator < right.numerator* divident / right.denominator);
+}
+
+bool operator>(const Fraction& left, const Fraction& right)
+{
+	int divident = Fraction::lcm(left.denominator, right.denominator);
+	return (left.numerator * divident / left.denominator > right.numerator* divident / right.denominator);
+}
+
+bool operator<=(const Fraction& left, const Fraction& right)
+{
+	int divident = Fraction::lcm(left.denominator, right.denominator);
+	return (left.numerator * divident / left.denominator <= right.numerator* divident / right.denominator);
+}
+
+bool operator>=(const Fraction& left, const Fraction& right)
+{
+	int divident = Fraction::lcm(left.denominator, right.denominator);
+	return (left.numerator * divident / left.denominator >= right.numerator* divident / right.denominator);
 }

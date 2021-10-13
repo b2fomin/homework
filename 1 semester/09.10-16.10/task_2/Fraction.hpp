@@ -23,4 +23,7 @@ public:
 	friend std::istream& operator>>(std::istream&, Fraction&);
 	friend Fraction operator+(const Fraction&, const Fraction&);
 	friend Fraction operator*(const Fraction&, const Fraction&);
+	friend Fraction operator-(const Fraction&, const Fraction&);
+	friend Fraction operator/(const Fraction&, const Fraction&);
+	
 };

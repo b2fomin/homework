@@ -78,3 +78,27 @@ Fraction operator*(const Fraction& left, const Fraction& right)
 	new_fraction.reduce_fraction();
 	return new_fraction;
 }
+
+Fraction operator-(const Fraction& left, const Fraction& right)
+{
+	Fraction new_fraction;
+
+	int dividend = Fraction::lcm(left.denominator, right.denominator);
+	new_fraction.denominator = static_cast<unsigned int>(dividend);
+	new_fraction.numerator = left.numerator * dividend / left.denominator -
+		right.numerator * dividend / left.denominator;
+
+	new_fraction.reduce_fraction();
+	return new_fraction;
+}
+
+Fraction operator/(const Fraction& left, const Fraction& right)
+{
+	Fraction new_fraction;
+
+	new_fraction.numerator = left.numerator * right.denominator;
+	new_fraction.denominator = left.denominator * right.numerator;
+
+	new_fraction.reduce_fraction();
+	return new_fraction;
+}

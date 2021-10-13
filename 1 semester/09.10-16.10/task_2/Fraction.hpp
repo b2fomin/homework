@@ -21,4 +21,5 @@ public:
 
 	friend std::ostream& operator<<(std::ostream&, const Fraction&);
 	friend std::istream& operator>>(std::istream&, Fraction&);
+	friend Fraction operator+(Fraction&, const Fraction&);
 };

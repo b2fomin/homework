@@ -47,3 +47,7 @@ void Array::append(int value)
 	for (int i = 0; i < size - 1; ++i) data[i] = old_data[i];
 	data[size - 1] = value;
 }
+
+int Array::get_size() const { return size; };
+int* Array::get_data() const { return data; };
+std::vector<int> Array::get_arr() const { return arr; };

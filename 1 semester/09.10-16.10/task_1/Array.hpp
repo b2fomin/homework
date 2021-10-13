@@ -1,4 +1,5 @@
 #pragma once
+#include<iostream>
 #include<vector>
 
 class Array
@@ -10,6 +11,7 @@ private:
 public:
 	void set_arr(std::vector<int> arr);
 	void append(int value);
+	friend std::ostream& operator<<(std::ostream& out, const Array& other);
 
 	int get_size() const;
 	int* get_data() const;
@@ -20,4 +22,5 @@ public:
 	Array(const Array& other);
 	Array(Array&& other);
 	Array& operator=(const Array& other);
+	Array& operator=(Array&& other);
 };

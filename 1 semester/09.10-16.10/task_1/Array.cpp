@@ -1,6 +1,6 @@
 #include"Array.hpp"
 
-Array::Array(int size,std::vector<int> arr) :size(size), arr(arr)
+Array::Array(int size, std::vector<int> arr) :size(size), arr(arr)
 {
 	data = new int[size];
 }
@@ -34,6 +34,18 @@ Array& Array::operator=(const Array& other)
 	return *this;
 }
 
+Array& Array::operator=(Array&& other)
+{
+	if (&other == this) return *this;
+
+	delete[] data;
+	size = other.size;
+	arr = std::move(other.arr);
+	data = other.data;
+	other.data = nullptr;
+	return *this;
+}
+
 void Array::set_arr(std::vector<int> arr)
 {
 	this->arr = arr;
@@ -46,6 +58,16 @@ void Array::append(int value)
 
 	for (int i = 0; i < size - 1; ++i) data[i] = old_data[i];
 	data[size - 1] = value;
+}
+
+std::ostream& operator<<(std::ostream& out, const Array& other)
+{
+	out << "Size of array: " << other.size << std::endl;
+	out << "Vector of array: ";
+	for (auto& elem : other.arr) out << elem << '\t';
+	out << std::endl << "Data of array: ";
+	for (int i = 0; i < other.size; ++i) out << other.data[i] << '\t';
+	return out << std::endl;
 }
 
 int Array::get_size() const { return size; };

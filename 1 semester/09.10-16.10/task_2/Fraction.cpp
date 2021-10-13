@@ -34,6 +34,9 @@ std::ostream& operator<<(std::ostream& out, const Fraction& other)
 	return out << other.numerator << '/' << other.denominator;
 }
 
+int Fraction::get_numerator() const { return numerator; };
+int Fraction::get_denominator() const { return denominator; };
+
 std::istream& operator>>(std::istream& in, Fraction& other) // input format: "numerator"/"denominator"
 {
 	std::string fraction;

@@ -61,7 +61,7 @@ namespace frac
 		int dividend = Fraction::lcm(left.denominator, right.denominator);
 		new_fraction.denominator = static_cast<unsigned int>(dividend);
 		new_fraction.numerator = left.numerator * dividend / left.denominator +
-			right.numerator * dividend / left.denominator;
+			right.numerator * dividend / right.denominator;
 
 		new_fraction.reduce_fraction();
 		return new_fraction;
@@ -85,7 +85,7 @@ namespace frac
 		int dividend = Fraction::lcm(left.denominator, right.denominator);
 		new_fraction.denominator = static_cast<unsigned int>(dividend);
 		new_fraction.numerator = left.numerator * dividend / left.denominator -
-			right.numerator * dividend / left.denominator;
+			right.numerator * dividend / right.denominator;
 
 		new_fraction.reduce_fraction();
 		return new_fraction;

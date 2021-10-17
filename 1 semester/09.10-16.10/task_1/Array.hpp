@@ -24,5 +24,5 @@ public:
 	Array(Array&& other);
 	Array& operator=(const Array& other);
 	Array& operator=(Array&& other);
-	int& operator[](const int index);
+	int& operator[](const int index) const;
 };

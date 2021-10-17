@@ -20,7 +20,6 @@ int main()
 
 	for (int i = 1; i < 4; ++i) arr1[i]=i;
 	for (int i = 4; i < 7; ++i) arr2[i]=i;
-
 	Array arr3{ arr1 };
 	arr2 = arr1;
 	cout << arr1 << arr2 << endl;

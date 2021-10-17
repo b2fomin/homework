@@ -17,9 +17,8 @@ Array::Array(const Array& other) :size(other.size), arr(other.arr)
 	for (int i = 0; i < size; ++i) data[i] = other.data[i];
 }
 
-Array::Array(Array&& other) :size(other.size), data(other.data)
+Array::Array(Array&& other) :size(other.size), data(other.data), arr(std::move(other.arr))
 {
-	arr = std::move(other.arr);
 	other.data = nullptr;
 }
 
@@ -59,6 +58,7 @@ void Array::append(int value)
 
 	for (int i = 0; i < size - 1; ++i) data[i] = old_data[i];
 	data[size - 1] = value;
+	delete[] old_data;
 }
 
 std::ostream& operator<<(std::ostream& out, const Array& other)
@@ -71,7 +71,7 @@ std::ostream& operator<<(std::ostream& out, const Array& other)
 	return out << std::endl;
 }
 
-int& Array::operator[](const int index)
+int& Array::operator[](const int index) const
 {
 	return data[index];
 }

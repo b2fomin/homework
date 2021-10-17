@@ -132,24 +132,24 @@ namespace frac
 		return (left.numerator * divident / left.denominator >= right.numerator * divident / right.denominator);
 	}
 
-	Fraction Fraction::operator+=(const Fraction& other)
+	Fraction& Fraction::operator+=(const Fraction& other)
 	{
-		return operator+(*this, other);
+		return *this = operator+(*this, other);
 	}
 
-	Fraction Fraction::operator*=(const Fraction& other)
+	Fraction& Fraction::operator*=(const Fraction& other)
 	{
-		return operator*(*this, other);
+		return *this = operator*(*this, other);
 	}
 
-	Fraction Fraction::operator-=(const Fraction& other)
+	Fraction& Fraction::operator-=(const Fraction& other)
 	{
-		return operator-(*this, other);
+		return *this = operator-(*this, other);
 	}
 
-	Fraction Fraction::operator/=(const Fraction& other)
+	Fraction& Fraction::operator/=(const Fraction& other)
 	{
-		return operator/(*this, other);
+		return *this = operator/(*this, other);
 	}
 
 	Fraction Fraction::operator++()

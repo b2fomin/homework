@@ -46,6 +46,7 @@ namespace frac
 				other.numerator = std::stoi(current);
 				current = "";
 			}
+			else current += elem;
 		}
 
 		other.denominator = std::stoi(current);

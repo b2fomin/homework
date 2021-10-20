@@ -65,3 +65,20 @@ class Square :public Rectangle
 public:
 	Square(double);
 };
+
+class Ellipse : public Figure
+{
+protected:
+	double radius1, radius2;
+public:
+	Ellipse(double, double);
+	virtual ~Ellipse() = default;
+	virtual double perimetr() final;
+	virtual double area() final;
+};
+
+class Circle :public Ellipse
+{
+public:
+	Circle(double);
+};

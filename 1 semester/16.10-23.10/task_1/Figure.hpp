@@ -7,6 +7,7 @@ class Figure
 protected:
 	std::vector<std::pair<int, int>> figure;
 	int size;
+	virtual void calculate_figure()=0;
 public:
 	virtual ~Figure();
 	virtual double perimetr() = 0;
@@ -20,6 +21,7 @@ class Triangle :public Polygon
 {
 protected:
 	double side1, side2, side3;
+	virtual void calculate_figure() final;
 public:
 	Triangle(double, double, double);
 	virtual ~Triangle() = default;
@@ -42,6 +44,7 @@ class Parallelogram :public Quadrangle
 {
 protected:
 	double alpha;
+	virtual void calculate_figure() final;
 public:
 	Parallelogram(double, double, double);
 	virtual ~Parallelogram() = default;
@@ -70,6 +73,7 @@ class Ellipse : public Figure
 {
 protected:
 	double radius1, radius2;
+	virtual void calculate_figure() final;
 public:
 	Ellipse(double, double);
 	virtual ~Ellipse() = default;

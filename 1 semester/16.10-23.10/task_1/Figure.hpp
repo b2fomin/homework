@@ -5,10 +5,24 @@
 class Figure
 {
 protected:
-	std::vector<int> figure;
+	std::vector<std::pair<int, int>> figure;
+	int size;
 public:
 	virtual ~Figure();
-	virtual int perimetr() = 0;
-	virtual int area() = 0;
-	friend std::ostream& operator<<(std::ostream& out, const Figure& figure);
+	virtual double perimetr() = 0;
+	virtual double area() = 0;
+	friend std::ostream& operator<<(std::ostream&, const Figure&);
+};
+
+class Polygon :public Figure {};
+
+class Triangle :public Polygon
+{
+protected:
+	double side1, side2, side3;
+public:
+	Triangle(double, double, double);
+	virtual ~Triangle();
+	virtual double perimetr() override;
+	virtual double area() override;
 };

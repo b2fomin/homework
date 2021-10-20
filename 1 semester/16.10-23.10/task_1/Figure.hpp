@@ -9,7 +9,7 @@ protected:
 	int size;
 	virtual void calculate_figure()=0;
 public:
-	virtual ~Figure();
+	virtual ~Figure() = 0;
 	virtual double perimetr() = 0;
 	virtual double area() = 0;
 	friend std::ostream& operator<<(std::ostream&, const Figure&);
@@ -35,7 +35,7 @@ protected:
 	double side1, side2, side3, side4;
 public:
 	Quadrangle(double, double, double, double);
-	virtual ~Quadrangle();
+	virtual ~Quadrangle() = 0;
 	virtual double perimetr() final;
 	virtual double area() override = 0;
 };
@@ -47,7 +47,6 @@ protected:
 	virtual void calculate_figure() final;
 public:
 	Parallelogram(double, double, double);
-	virtual ~Parallelogram() = default;
 	virtual double area() final;
 };
 

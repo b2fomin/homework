@@ -30,3 +30,15 @@ double Triangle::area()
 	double p = (side1 + side2 + side3) / 2;
 	return sqrt(p * (p - side1) * (p - side2) * (p - side3));
 }
+
+Quadrangle::Quadrangle(double side1, double side2, double side3, double side4) :
+	side1(side1), side2(side2), side3(side3), side4(side4)
+{
+
+}
+
+double Quadrangle::perimetr()
+{
+	return side1 + side2 + side3 + side4;
+}
+

@@ -115,3 +115,7 @@ void Parallelogram::calculate_figure()
 		figure.push_back(std::make_pair(round(x_0 - i), round(y_0 + i * sin_alpha)));
 	}
 }
+
+Rhombus::Rhombus(double side, double alpha) :Parallelogram(side, side, alpha) {};
+Rectangle::Rectangle(double side1, double side2) :Parallelogram(side1, side2, M_PI / 2) {};
+Square::Square(double side) :Rectangle(side, side) {};

@@ -18,11 +18,41 @@ std::ostream& operator<<(std::ostream& out, const Figure& figure)
 	}
 }
 
-Triangle::Triangle(double side1, double side2, double side3) : side1(side1), side2(side2), side3(side3) {};
+Triangle::Triangle(double side1, double side2, double side3) : side1(side1), side2(side2), side3(side3)
+{
+	calculate_figure();
+}
 
 double Triangle::perimetr()
 {
 	return side1 + side2 + side3;
+}
+
+void Triangle::calculate_figure()
+{
+	size = 3*std::max(side1, side2, side3);
+	double cos_alpha_1 = (side1 * side1 + side2 * side2 - side3 * side3) / (2 * side1 * side2);
+	double sin_alpha_1 = sqrt(1 - cos_alpha_1 * cos_alpha_1);
+	double cos_alpha_2= (side1 * side1 + side3 * side3 - side2 * side2) / (2 * side1 * side3);
+	double sin_alpha_1 = sqrt(1 - cos_alpha_2 * cos_alpha_2);
+
+	int x_0 = size / 2 - round(side1);
+	//side 1
+	for (int i = 0; i < side1; ++i)
+	{
+		figure.push_back(std::make_pair(x_0+i,0));
+	}
+	//side 2
+	for (int i = 0; i < side2; ++i)
+	{
+		figure.push_back(std::make_pair(x_0+round(i*cos_alpha_1), round(i*sin_alpha_1)));
+	}
+	x_0 += side1;
+	//side 3
+	for (int i = 0; i < side3; ++i)
+	{
+		figure.push_back(std::make_pair(x_0 - round(i * cos_alpha_1), round(i * sin_alpha_1)));
+	}
 }
 
 double Triangle::area()

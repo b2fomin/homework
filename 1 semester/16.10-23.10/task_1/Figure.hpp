@@ -22,8 +22,8 @@ protected:
 	double side1, side2, side3;
 public:
 	Triangle(double, double, double);
-	virtual ~Triangle();
-	virtual double perimetr() override;
+	virtual ~Triangle() = default;
+	virtual double perimetr() final;
 	virtual double area() override;
 };
 
@@ -34,9 +34,34 @@ protected:
 public:
 	Quadrangle(double, double, double, double);
 	virtual ~Quadrangle();
-	virtual double perimetr() override
-	{
-		return side1 + side2 + side3 + side4;
-	}
+	virtual double perimetr() final;
 	virtual double area() override = 0;
+};
+
+class Parallelogram :public Quadrangle
+{
+protected:
+	double alpha;
+public:
+	Parallelogram(double, double, double);
+	virtual ~Parallelogram() = default;
+	virtual double area() final;
+};
+
+class Rhombus :public Parallelogram
+{
+public:
+	Rhombus(double, double);
+};
+
+class Rectangle :public Parallelogram
+{
+public:
+	Rectangle(double, double);
+};
+
+class Square :public Rectangle
+{
+public:
+	Square(double);
 };

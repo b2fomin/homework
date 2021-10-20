@@ -26,7 +26,7 @@ public:
 	Triangle(double, double, double);
 	virtual ~Triangle() = default;
 	virtual double perimetr() final;
-	virtual double area() override;
+	virtual double area() final;
 };
 
 class Quadrangle :public Polygon

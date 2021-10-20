@@ -17,3 +17,16 @@ std::ostream& operator<<(std::ostream& out, const Figure& figure)
 		out << std::endl;
 	}
 }
+
+Triangle::Triangle(double side1, double side2, double side3) : side1(side1), side2(side2), side3(side3) {};
+
+double Triangle::perimetr()
+{
+	return side1 + side2 + side3;
+}
+
+double Triangle::area()
+{
+	double p = (side1 + side2 + side3) / 2;
+	return sqrt(p * (p - side1) * (p - side2) * (p - side3));
+}

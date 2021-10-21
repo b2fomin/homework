@@ -33,7 +33,7 @@ double Triangle::perimetr()
 void Triangle::calculate_figure()
 {
 	std::vector<double> arr{ side1, side2, side3 };
-	size = 3 * round(*std::max_element(arr.begin(),arr.end()));
+	size = 3 * round(*std::max_element(arr.begin(), arr.end()));
 	double cos_alpha_1 = (side1 * side1 + side2 * side2 - side3 * side3) / (2 * side1 * side2);
 	double sin_alpha_1 = sqrt(1 - cos_alpha_1 * cos_alpha_1);
 	double cos_alpha_2 = (side1 * side1 + side3 * side3 - side2 * side2) / (2 * side1 * side3);
@@ -124,3 +124,33 @@ void Parallelogram::calculate_figure()
 Rhombus::Rhombus(double side, double alpha) :Parallelogram(side, side, alpha) {};
 Rectangle::Rectangle(double side1, double side2) :Parallelogram(side1, side2, M_PI / 2) {};
 Square::Square(double side) :Rectangle(side, side) {};
+
+Ellipse::Ellipse(double radius1, double radius2) :radius1(std::max(radius1, radius2)), radius2(std::min(radius1, radius2))
+{
+	calculate_figure();
+}
+
+double Ellipse::perimetr()
+{
+	return 4 * (M_PI * radius1 * radius2 + (radius1 - radius2)) / (radius1 + radius2);
+}
+
+double Ellipse::area()
+{
+	return M_PI * radius1 * radius2;
+}
+
+void Ellipse::calculate_figure()//doesn't work if radius1>10
+{
+	size = 3 * round(radius1);
+	int x_0 = 2 * round(radius1);
+	int y_0 = 2 * round(radius2);
+	for (int i = -round(radius1); i < round(radius1); ++i)
+	{
+		figure.push_back(std::make_pair(x_0 + i, round(y_0+radius2 * sqrt(1 - i * i / (radius1 * radius1)))));
+		figure.push_back(std::make_pair(x_0 + i, round(y_0-radius2 * sqrt(1 - i * i / (radius1 * radius1)))));
+	}
+	std::sort(figure.begin(), figure.end(), [](std::pair<int, int> p1, std::pair<int, int> p2) {return p1.second < p2.second; });
+}
+
+Circle::Circle(double radius) :Ellipse(radius, radius) {};

@@ -1,6 +1,9 @@
 #pragma once
 #include<iostream>
 #include<vector>
+#define _USE_MATH_DEFINES
+#include<math.h>
+#include<algorithm>
 
 class Figure
 {
@@ -9,7 +12,7 @@ protected:
 	int size;
 	virtual void calculate_figure()=0;
 public:
-	virtual ~Figure() = 0;
+	virtual ~Figure()=default;
 	virtual double perimetr() = 0;
 	virtual double area() = 0;
 	friend std::ostream& operator<<(std::ostream&, const Figure&);
@@ -35,7 +38,7 @@ protected:
 	double side1, side2, side3, side4;
 public:
 	Quadrangle(double, double, double, double);
-	virtual ~Quadrangle() = 0;
+	virtual ~Quadrangle() = default;
 	virtual double perimetr() final;
 	virtual double area() override = 0;
 };

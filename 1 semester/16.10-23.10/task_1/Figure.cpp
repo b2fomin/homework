@@ -56,7 +56,7 @@ void Triangle::calculate_figure()
 	{
 		figure.push_back(std::make_pair(round(x_0 - i * cos_alpha_2), round(i * sin_alpha_2)));
 	}
-	std::sort(figure.begin(), figure.end(), [](std::pair<int, int> p1, std::pair<int, int> p2) {return p1.second < p2.second; });
+	std::sort(figure.begin(), figure.end(), [](std::pair<int, int> p1, std::pair<int, int> p2) {return (p1.second < p2.second) || ((p1.second == p2.second) && (p1.first < p2.first)); });
 }
 
 double Triangle::area()
@@ -118,7 +118,7 @@ void Parallelogram::calculate_figure()
 	{
 		figure.push_back(std::make_pair(round(x_0 + i * cos_alpha), round(y_0 + i * sin_alpha)));
 	}
-	std::sort(figure.begin(), figure.end(), [](std::pair<int, int> p1, std::pair<int, int> p2) {return p1.second < p2.second; });
+	std::sort(figure.begin(), figure.end(), [](std::pair<int, int> p1, std::pair<int, int> p2) {return (p1.second < p2.second) || ((p1.second == p2.second) && (p1.first < p2.first)); });
 }
 
 Rhombus::Rhombus(double side, double alpha) :Parallelogram(side, side, alpha) {};
@@ -140,7 +140,7 @@ double Ellipse::area()
 	return M_PI * radius1 * radius2;
 }
 
-void Ellipse::calculate_figure()//doesn't work if radius1>10
+void Ellipse::calculate_figure()
 {
 	size = 3 * round(radius1);
 	int x_0 = 2 * round(radius1);
@@ -150,7 +150,7 @@ void Ellipse::calculate_figure()//doesn't work if radius1>10
 		figure.push_back(std::make_pair(x_0 + i, round(y_0+radius2 * sqrt(1 - i * i / (radius1 * radius1)))));
 		figure.push_back(std::make_pair(x_0 + i, round(y_0-radius2 * sqrt(1 - i * i / (radius1 * radius1)))));
 	}
-	std::sort(figure.begin(), figure.end(), [](std::pair<int, int> p1, std::pair<int, int> p2) {return p1.second < p2.second; });
+	std::sort(figure.begin(), figure.end(), [](std::pair<int, int> p1, std::pair<int, int> p2) {return (p1.second < p2.second)||((p1.second==p2.second)&&(p1.first<p2.first)); });
 }
 
 Circle::Circle(double radius) :Ellipse(radius, radius) {};

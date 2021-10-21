@@ -3,6 +3,10 @@
 
 int main()//now work only with one figure
 {
-	Figure* fig = new Parallelogram(4, 5, M_PI / 6);
-	std::cout << *fig;
+	std::vector<Figure*> arr{ new Triangle(9,5,5), new Parallelogram(5,6,M_PI / 6), new Ellipse(5,6) };
+	for (auto& elem : arr)
+	{
+		std::cout << elem->perimetr() << '\t' << elem->area() << std::endl;
+	}
+	std::cout << *arr[0];
 }

@@ -22,10 +22,10 @@ std::ostream& operator<<(std::ostream& out, const Figure& figure)
 
 Triangle::Triangle(double side1, double side2, double side3) : side1(side1), side2(side2), side3(side3)
 {
-	calculate_figure();
+
 }
 
-double Triangle::perimetr()
+double Triangle::perimeter()
 {
 	return side1 + side2 + side3;
 }
@@ -71,14 +71,14 @@ Quadrangle::Quadrangle(double side1, double side2, double side3, double side4) :
 
 }
 
-double Quadrangle::perimetr()
+double Quadrangle::perimeter()
 {
 	return side1 + side2 + side3 + side4;
 }
 
 Parallelogram::Parallelogram(double side1, double side2, double alpha) :Quadrangle(side1, side2, side1, side2), alpha(alpha)
 {
-	calculate_figure();
+
 }
 
 double Parallelogram::area()
@@ -127,10 +127,10 @@ Square::Square(double side) :Rectangle(side, side) {};
 
 Ellipse::Ellipse(double radius1, double radius2) :radius1(std::max(radius1, radius2)), radius2(std::min(radius1, radius2))
 {
-	calculate_figure();
+
 }
 
-double Ellipse::perimetr()
+double Ellipse::perimeter()
 {
 	return 4 * (M_PI * radius1 * radius2 + (radius1 - radius2)) / (radius1 + radius2);
 }
@@ -154,3 +154,8 @@ void Ellipse::calculate_figure()
 }
 
 Circle::Circle(double radius) :Ellipse(radius, radius) {};
+
+double Circle::perimeter()
+{
+	return 2 * M_PI * radius1;
+}

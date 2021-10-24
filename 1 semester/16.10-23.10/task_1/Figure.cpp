@@ -2,21 +2,18 @@
 
 std::ostream& operator<<(std::ostream& out, const Figure& figure)
 {
+	int current = 0;
 	for (int i = 0; i < figure.size; ++i)
 	{
-		static int current = 0;
 		for (int j = 0; j < figure.size; ++j)
 		{
 			if (j != figure.figure[current].first) out << " ";
 			else
 			{
 				out << "*";
-				if (current < figure.figure.size() - 1) ++current;
-				else
-				{
-					current = 0;
-					return out << std::endl;
-				}
+				if (current < figure.figure.size() - 1)
+					while ((j == figure.figure[current].first)&&(figure.figure[current].second == i)) ++current;
+				else return out << std::endl;
 			}
 		}
 		out << std::endl;
@@ -151,10 +148,10 @@ void Ellipse::calculate_figure()
 	int y_0 = 2 * round(radius2);
 	for (int i = -round(radius1); i < round(radius1); ++i)
 	{
-		figure.push_back(std::make_pair(x_0 + i, round(y_0+radius2 * sqrt(1 - i * i / (radius1 * radius1)))));
-		figure.push_back(std::make_pair(x_0 + i, round(y_0-radius2 * sqrt(1 - i * i / (radius1 * radius1)))));
+		figure.push_back(std::make_pair(x_0 + i, round(y_0 + radius2 * sqrt(1 - i * i / (radius1 * radius1)))));
+		figure.push_back(std::make_pair(x_0 + i, round(y_0 - radius2 * sqrt(1 - i * i / (radius1 * radius1)))));
 	}
-	std::sort(figure.begin(), figure.end(), [](std::pair<int, int> p1, std::pair<int, int> p2) {return (p1.second < p2.second)||((p1.second==p2.second)&&(p1.first<p2.first)); });
+	std::sort(figure.begin(), figure.end(), [](std::pair<int, int> p1, std::pair<int, int> p2) {return (p1.second < p2.second) || ((p1.second == p2.second) && (p1.first < p2.first)); });
 }
 
 Circle::Circle(double radius) :Ellipse(radius, radius) {};

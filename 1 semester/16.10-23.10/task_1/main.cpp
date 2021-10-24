@@ -1,12 +1,13 @@
 #include"Figure.hpp"
 #include<iostream>
 
-int main()//now work only with one figure
+int main()
 {
-	std::vector<Figure*> arr{ new Triangle(9,5,5), new Parallelogram(5,6,M_PI / 6), new Ellipse(5,6) };
+	std::vector<Figure*> arr{ new Triangle(18,10,10), new Parallelogram(5,6,M_PI / 6), new Ellipse(5,6) };
 	for (auto& elem : arr)
 	{
-		std::cout << elem->perimetr() << '\t' << elem->area() << std::endl;
+		elem->calculate_figure();
+		std::cout << elem->perimeter() << '\t' << elem->area() << std::endl;
+		std::cout << *elem;		
 	}
-	std::cout << *arr[0];
 }

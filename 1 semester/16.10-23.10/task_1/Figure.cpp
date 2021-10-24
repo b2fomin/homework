@@ -12,7 +12,11 @@ std::ostream& operator<<(std::ostream& out, const Figure& figure)
 			{
 				out << "*";
 				if (current < figure.figure.size() - 1) ++current;
-				else return out << std::endl;
+				else
+				{
+					current = 0;
+					return out << std::endl;
+				}
 			}
 		}
 		out << std::endl;

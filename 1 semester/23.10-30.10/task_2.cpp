@@ -1,4 +1,5 @@
 #include<iostream>
+#include<vector>
 #include<exception>
 
 void foo(int& number)
@@ -32,8 +33,19 @@ int main()
 
 	try
 	{
-		int number = pow(10, 10);
-		if (number != pow(10, 10)) throw std::length_error("Lenght error");
+		std::vector<int> arr(-1);
+	}
+	catch (const std::length_error& exception)
+	{
+		std::cout << exception.what() << std::endl;
+	}
+
+	try
+	{
+		long long int number1 = pow(10,10);
+		int number;
+		if ((int)number1 != number1) throw std::length_error("Length error");
+		else number = number1;
 	}
 	catch (const std::length_error& exception)
 	{

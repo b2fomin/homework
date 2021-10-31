@@ -45,12 +45,14 @@ namespace frac
 			if (elem == '/')
 			{
 				other.numerator = std::stoi(current);
+				if (other.numerator != std::stoi(current)) throw std::length_error("Too large number");
 				current = "";
 			}
 			else current += elem;
 		}
 
 		other.denominator = std::stoi(current);
+		if (other.denominator != std::stoi(current)) throw std::length_error("Too large number");
 		other.reduce_fraction();
 
 		return in;
@@ -60,10 +62,16 @@ namespace frac
 	{
 		Fraction new_fraction;
 
-		int dividend = Fraction::lcm(left.denominator, right.denominator);
+		int dividend = 0;
+		long long int current = Fraction::lcm(left.denominator, right.denominator);
+		if ((int)current == current) dividend = current;
+		else throw std::length_error("Too large number");
+		
 		new_fraction.denominator = static_cast<unsigned int>(dividend);
-		new_fraction.numerator = left.numerator * dividend / left.denominator +
+		current = left.numerator * dividend / left.denominator +
 			right.numerator * dividend / right.denominator;
+		if ((int)current == current) new_fraction.numerator = current;
+		else throw std::length_error("Too large number");
 
 		new_fraction.reduce_fraction();
 		return new_fraction;
@@ -73,8 +81,13 @@ namespace frac
 	{
 		Fraction new_fraction;
 
-		new_fraction.numerator = left.numerator * right.numerator;
-		new_fraction.denominator = left.denominator * right.denominator;
+		long long int current = left.numerator * right.numerator;
+		if ((int)current == current) new_fraction.numerator = current;
+		else throw std::length_error("Too large number");
+
+		current = left.denominator * right.denominator;
+		if ((unsigned int)current == current) new_fraction.denominator = current;
+		else throw std::length_error("Too large number");
 
 		new_fraction.reduce_fraction();
 		return new_fraction;
@@ -84,10 +97,17 @@ namespace frac
 	{
 		Fraction new_fraction;
 
-		int dividend = Fraction::lcm(left.denominator, right.denominator);
+		long long int current = Fraction::lcm(left.denominator, right.denominator);
+		int dividend = 0;
+		if ((int)current == current) dividend = current;
+		else throw std::length_error("Too large number");
+		
 		new_fraction.denominator = static_cast<unsigned int>(dividend);
-		new_fraction.numerator = left.numerator * dividend / left.denominator -
+		
+		current = left.numerator * dividend / left.denominator -
 			right.numerator * dividend / right.denominator;
+		if ((int)current == current) new_fraction.numerator = current;
+		else throw std::length_error("Too large number");
 
 		new_fraction.reduce_fraction();
 		return new_fraction;
@@ -97,8 +117,13 @@ namespace frac
 	{
 		Fraction new_fraction;
 
-		new_fraction.numerator = left.numerator * right.denominator;
-		new_fraction.denominator = left.denominator * right.numerator;
+		long long int current = left.numerator * right.denominator;
+		if ((int)current == current) new_fraction.numerator = current;
+		else throw std::length_error("Too large number");
+
+		current = left.denominator * right.numerator;
+		if ((unsigned int)current == current) new_fraction.denominator = current;
+		else throw std::length_error("Too large number");
 
 		new_fraction.reduce_fraction();
 		return new_fraction;
@@ -155,27 +180,35 @@ namespace frac
 
 	Fraction Fraction::operator++()
 	{
-		numerator += denominator;
+		long long int current = numerator + denominator;
+		if ((int)current == current) numerator = current;
+		else throw std::length_error("Too large number");
 		return *this;
 	}
 
 	Fraction Fraction::operator--()
 	{
-		numerator -= denominator;
+		long long int current = numerator - denominator;
+		if ((int)current == current) numerator == current;
+		else throw std::length_error("Too large number");
 		return *this;
 	}
 
 	Fraction Fraction::operator++(int)
 	{
 		Fraction old_fraction{ numerator,denominator };
-		numerator += denominator;
+		long long int current = numerator - denominator;
+		if ((int)current == current) numerator == current;
+		else throw std::length_error("Too large number");
 		return old_fraction;
 	}
 
 	Fraction Fraction::operator--(int)
 	{
 		Fraction old_fraction{ numerator,denominator };
-		numerator -= denominator;
+		long long int current = numerator - denominator;
+		if ((int)current == current) numerator == current;
+		else throw std::length_error("Too large number");
 		return old_fraction;
 	}
 

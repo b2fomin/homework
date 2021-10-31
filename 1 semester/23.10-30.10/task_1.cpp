@@ -3,8 +3,8 @@
 
 enum class Errors
 {
-	STRING_ERROR,
-	INT_ERROR
+	STRING_ERROR = -1,
+	INT_ERROR = -2
 };
 
 std::vector<std::pair<std::string, Errors>> exception_array{};
@@ -26,13 +26,9 @@ int main()
 {
 	int number = -1;
 	foo(number);
-	std::vector<std::pair<std::string, Errors>>::iterator it;
-	for (it=exception_array.begin();it<exception_array.end();++it)
+	for (auto it=exception_array.begin();it<exception_array.end();++it)
 	{
-		if (it->first != "foo") continue;
-		if(it->second==Errors::INT_ERROR) std::cout << "Negative number";
-		exception_array.erase(it);
-		break;
+		if (it->first == "foo") return (int)it->second;
 	}
 
 	return 0;

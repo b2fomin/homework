@@ -68,3 +68,18 @@ Array<T>& Array<T>::operator=(Array<T>&& other)
 
 	other.arr = nullptr;
 }
+
+template<class T>
+void Array<T>::push_back(T value)
+{
+	++size;
+	if (size > capacity)
+	{
+		capacity *= 2;
+		T* old_arr = arr;
+		arr = new T[capacity];
+
+		for (int i = 0; i < size - 1; ++i) arr[i] = old_arr[i];
+	}
+	arr[size - 1] = value;
+}

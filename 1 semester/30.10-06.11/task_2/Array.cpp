@@ -87,6 +87,7 @@ void Array<T>::push_back(T value)
 template<class T>
 T Array<T>::pop(int index)
 {
+	if ((index < 0) || (index >= m_size)) throw std::out_of_range("Invalid index");
 	--m_size;
 	if (m_size * 2 < m_capacity)
 	{
@@ -118,6 +119,7 @@ T* Array<T>::end() const noexcept { return arr + m_size; }
 template<class T>
 void Array<T>::resize(int new_size)
 {
+	if (new_size < 0) throw std::underflow_error("Negative size");
 	int old_size = m_size;
 	m_size = new_size;
 	while (m_size * 2 < m_capacity) m_capacity /= 2;
@@ -133,6 +135,7 @@ void Array<T>::resize(int new_size)
 template<class T>
 void Array<T>::insert(T value, int index)
 {
+	if ((index < 0) || (index >= m_size)) throw std::out_of_range("Invalid index");
 	++m_size;
 	if (m_size > m_capacity)
 	{

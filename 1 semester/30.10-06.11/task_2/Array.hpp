@@ -26,6 +26,6 @@ public:
 
 	friend std::ostream& operator<<(std::ostream&, const Array<T>);
 	friend std::istream& operator<<(std::istream&, Array<T>);
-	Array<T> operator+(const Array<T>&, const Array<T>&);
+	friend Array<T> operator+(const Array<T>&, const Array<T>&);
 
 };

@@ -1,8 +1,7 @@
 #include "Array.hpp"
 
 template<class T>
-Array<T>::Array() :
-	m_size(0), m_capacity(1), arr(new T[1]) {};
+Array<T>::Array() =default;
 
 template<class T>
 Array<T>::Array(std::initializer_list<T> arr) :

@@ -85,7 +85,7 @@ void Array<T>::push_back(value_type value)
 }
 
 template<class T>
-T Array<T>::pop(size_type index)
+Array<T>::value_type Array<T>::pop(size_type index)
 {
 	if ((index < 0) || (index >= m_size)) throw std::out_of_range("Invalid index");
 	--m_size;
@@ -105,16 +105,22 @@ T Array<T>::pop(size_type index)
 }
 
 template<class T>
-int Array<T>::size() const noexcept { return size; }
+Array<T>::size_type Array<T>::size() const noexcept { return size; }
 
 template<class T>
-int Array<T>::capacity() const noexcept { return capacity; }
+Array<T>::size_type Array<T>::capacity() const noexcept { return capacity; }
 
 template<class T>
-T* Array<T>::begin() const noexcept { return arr; }
+Array<T>::const_iterator Array<T>::begin() const noexcept { return arr; }
 
 template<class T>
-T* Array<T>::end() const noexcept { return arr + m_size; }
+Array<T>::const_iterator Array<T>::end() const noexcept { return arr + m_size; }
+
+template<class T>
+Array<T>::iterator Array<T>::begin() noexcept { return arr; }
+
+template<class T>
+Array<T>::iterator Array<T>::end() noexcept { return arr + m_size; }
 
 template<class T>
 void Array<T>::resize(size_type new_size)
@@ -156,14 +162,14 @@ void Array<T>::insert(value_type value, size_type index)
 }
 
 template<class T>
-reference Array<T>::operator[](size_type index)
+Array<T>::reference Array<T>::operator[](size_type index)
 {
 	if ((index < 0) || (index >= m_size)) throw std::out_of_range("Invalid index");
 	return arr[index];
 }
 
 template<class T>
-const_reference Array<T>::operator[](int index) const
+Array<T>::const_reference Array<T>::operator[](size_type index) const
 {
 	if ((index < 0) || (index >= m_size)) throw std::out_of_range("Invalid index");
 	return arr[index];

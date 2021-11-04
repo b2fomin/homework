@@ -6,8 +6,8 @@ template<class T>
 class Array
 {
 private:
-	int capacity;
-	int size;
+	int m_capacity;
+	int m_size;
 	T* arr;
 public:
 
@@ -26,8 +26,8 @@ public:
 	void insert(T, int);
 	void resize(int);
 
-	int get_size() const noexcept;
-	int get_capacity() const noexcept;
+	int size() const noexcept;
+	int capacity() const noexcept;
 
 	friend std::ostream& operator<<(std::ostream&, const Array<T>);
 	friend Array<T> operator+(const Array<T>&, const Array<T>&);

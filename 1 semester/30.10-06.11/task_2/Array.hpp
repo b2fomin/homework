@@ -6,14 +6,23 @@ template<class T>
 class Array
 {
 private:
-	int m_capacity;
-	int m_size;
-	T* arr;
+	size_type m_capacity;
+	size_type m_size;
+	iterator arr;
 public:
+	using value_type = T;
+	using pointer = T*;
+	using const_pointer = const T*;
+	using reference = T&;
+	using const_reference = const T&;
+	using size_type = std::size_t;
+
+	using iterator = pointer;
+	using const_iterator = const_pointer;
 
 	Array();
 	Array(std::initializer_list<T>);
-	Array(int);
+	Array(size_type);
 
 	~Array();
 	Array(const Array<T>&);
@@ -21,19 +30,19 @@ public:
 	Array(Array<T>&&);
 	Array<T>& operator=(Array<T>&&);
 
-	void push_back(T);
-	T pop(int);
-	void insert(T, int);
-	void resize(int);
+	void push_back(value_type);
+	T pop(size_type);
+	void insert(T, size_type);
+	void resize(size_type);
 
-	int size() const noexcept;
-	int capacity() const noexcept;
-	T* begin() const noexcept;
-	T* end() const noexcept;
+	size_type size() const noexcept;
+	size_type capacity() const noexcept;
+	const_iterator begin() const noexcept;
+	const_iterator end() const noexcept;
 
 	friend std::ostream& operator<<(std::ostream&, const Array<T>);
 	friend Array<T> operator+(const Array<T>&, const Array<T>&);
 	Array<T>& operator+=(const Array<T>&);
-	T& operator[](int);
-	T& operator[](int) const;
+	reference operator[](size_type);
+	const_reference operator[](size_type) const;
 };

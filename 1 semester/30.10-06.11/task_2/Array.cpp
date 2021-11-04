@@ -17,7 +17,7 @@ Array<T>::Array(std::initializer_list<T> arr) :
 }
 
 template<class T>
-Array<T>::Array(int size) :
+Array<T>::Array(size_type size) :
 	m_size(size), m_capacity(size), arr(new T[size]) {};
 
 template<class T>
@@ -69,13 +69,13 @@ Array<T>& Array<T>::operator=(Array<T>&& other)
 }
 
 template<class T>
-void Array<T>::push_back(T value)
+void Array<T>::push_back(value_type value)
 {
 	++m_size;
 	if (m_size > m_capacity)
 	{
 		m_capacity *= 2;
-		T* old_arr = arr;
+		iterator old_arr = arr;
 		arr = new T[m_capacity];
 
 		for (int i = 0; i < m_size - 1; ++i) arr[i] = old_arr[i];
@@ -85,21 +85,21 @@ void Array<T>::push_back(T value)
 }
 
 template<class T>
-T Array<T>::pop(int index)
+T Array<T>::pop(size_type index)
 {
 	if ((index < 0) || (index >= m_size)) throw std::out_of_range("Invalid index");
 	--m_size;
 	if (m_size * 2 < m_capacity)
 	{
 		m_capacity /= 2;
-		T* old_arr = arr;
+		iterator old_arr = arr;
 		arr = new T[m_capacity];
 
 		for (int i = 0; i < m_size + 1; ++i)arr[i] = old_arr[i];
 		delete[] old_arr;
 	}
 
-	T result = arr[index];
+	value_type result = arr[index];
 	for (int i = index; i < m_size - 1; ++i) arr[i] = arr[i + 1];
 	return result;
 }
@@ -117,15 +117,15 @@ template<class T>
 T* Array<T>::end() const noexcept { return arr + m_size; }
 
 template<class T>
-void Array<T>::resize(int new_size)
+void Array<T>::resize(size_type new_size)
 {
 	if (new_size < 0) throw std::underflow_error("Negative size");
-	int old_size = m_size;
+	size_type old_size = m_size;
 	m_size = new_size;
 	while (m_size * 2 < m_capacity) m_capacity /= 2;
 	while (m_size > m_capacity) m_capacity *= 2;
 
-	T* old_arr = arr;
+	iterator old_arr = arr;
 	arr = new T[m_capacity];
 
 	for (int i = 0; i < old_size; ++i) arr[i] = old_arr[i];
@@ -133,21 +133,21 @@ void Array<T>::resize(int new_size)
 }
 
 template<class T>
-void Array<T>::insert(T value, int index)
+void Array<T>::insert(value_type value, size_type index)
 {
 	if ((index < 0) || (index >= m_size)) throw std::out_of_range("Invalid index");
 	++m_size;
 	if (m_size > m_capacity)
 	{
 		m_capacity *= 2;
-		T* old_arr = arr;
+		iterator old_arr = arr;
 		arr = new T[m_capacity];
 
 		for (int i = 0; i < m_size - 1; ++i) arr[i] = old_arr[i];
 		delete[] old_arr;
 	}
 
-	T tmp = arr[index];
+	value_type tmp = arr[index];
 	arr[index] = value;
 	for (int i = index + 1; i < m_size; ++i)
 	{
@@ -156,14 +156,14 @@ void Array<T>::insert(T value, int index)
 }
 
 template<class T>
-T& Array<T>::operator[](int index)
+reference Array<T>::operator[](size_type index)
 {
 	if ((index < 0) || (index >= m_size)) throw std::out_of_range("Invalid index");
 	return arr[index];
 }
 
 template<class T>
-T& Array<T>::operator[](int index) const
+const_reference Array<T>::operator[](int index) const
 {
 	if ((index < 0) || (index >= m_size)) throw std::out_of_range("Invalid index");
 	return arr[index];

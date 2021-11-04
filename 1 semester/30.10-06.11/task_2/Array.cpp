@@ -110,6 +110,12 @@ template<class T>
 int Array<T>::capacity() const noexcept { return capacity; }
 
 template<class T>
+T* Array<T>::begin() const noexcept { return arr; }
+
+template<class T>
+T* Array<T>::end() const noexcept { return arr + m_size; }
+
+template<class T>
 void Array<T>::resize(int new_size)
 {
 	int old_size = m_size;

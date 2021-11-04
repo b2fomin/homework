@@ -28,6 +28,8 @@ public:
 
 	int size() const noexcept;
 	int capacity() const noexcept;
+	T* begin() const noexcept;
+	T* end() const noexcept;
 
 	friend std::ostream& operator<<(std::ostream&, const Array<T>);
 	friend Array<T> operator+(const Array<T>&, const Array<T>&);

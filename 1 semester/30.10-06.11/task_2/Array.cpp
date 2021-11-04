@@ -124,3 +124,25 @@ void Array<T>::resize(int new_size)
 	for (int i = 0; i < old_size; ++i) arr[i] = old_arr[i];
 	delete[] old_arr;
 }
+
+template<class T>
+void insert(T value, int index)
+{
+	++size;
+	if (size > capacity)
+	{
+		capacity *= 2;
+		T* old_arr = arr;
+		arr = new T[capacity];
+
+		for (int i = 0; i < size - 1; ++i) arr[i] = old_arr[i];
+		delete[] old_arr;
+	}
+
+	T tmp = arr[index];
+	arr[index] = value;
+	for (int i = index+1; i < size; ++i)
+	{
+		std::swap(tmp, arr[i]);
+	}
+}

@@ -109,3 +109,18 @@ int Array<T>::get_size() const noexcept { return size; }
 
 template<class T>
 int Array<T>::get_capacity() const noexcept { return capacity; }
+
+template<class T>
+void Array<T>::resize(int new_size)
+{
+	int old_size = size;
+	size = new_size;
+	while (size * 2 < capacity) capacity /= 2;
+	while (size > capacity) capacity *= 2;
+
+	T* old_arr = arr;
+	arr = new T[capacity];
+
+	for (int i = 0; i < old_size; ++i) arr[i] = old_arr[i];
+	delete[] old_arr;
+}

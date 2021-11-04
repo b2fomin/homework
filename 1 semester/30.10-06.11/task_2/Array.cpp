@@ -153,3 +153,24 @@ T& Array<T>::operator[](int index)
 	if ((index < 0) || (index >= size)) throw std::out_of_range("Invalid index");
 	return arr[index];
 }
+
+template<class T>
+std::ostream& operator<<(std::ostream& out, const Array<T> arr)
+{
+	for (auto& elem : arr.arr) out << elem << '\t';
+	return out;
+}
+
+template<class T>
+Array<T> operator+(const Array<T>& left, const Array<T>& right)
+{
+	Array<T> new_arr;
+	new_arr.size = left.size + right.size;
+	new_arr.capacity = left.capacity + right.capacity;
+	new_arr.arr = new T[new_arr.capacity];
+	int i = 0;
+	for (i; i < left.size; ++i) new_arr[i] = left.arr[i];
+	for (i; i < new_arr.size++i) new_arr[i] = right.arr[i - left.size];
+
+	return new_arr;
+}

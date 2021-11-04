@@ -1,5 +1,6 @@
 #pragma once
 #include<iostream>
+#include<exception>
 
 template<class T>
 class Array
@@ -24,8 +25,12 @@ public:
 	void insert(T, int);
 	void resize(int);
 
+	int get_size() const noexcept;
+	int get_capacity() const noexcept;
+
 	friend std::ostream& operator<<(std::ostream&, const Array<T>);
-	friend std::istream& operator<<(std::istream&, Array<T>);
+	friend std::istream& operator>>(std::istream&, Array<T>);
 	friend Array<T> operator+(const Array<T>&, const Array<T>&);
+	T& operator[](int);
 
 };

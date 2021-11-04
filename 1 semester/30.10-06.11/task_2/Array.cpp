@@ -126,7 +126,7 @@ void Array<T>::resize(int new_size)
 }
 
 template<class T>
-void insert(T value, int index)
+void Array<T>::insert(T value, int index)
 {
 	++size;
 	if (size > capacity)
@@ -141,8 +141,15 @@ void insert(T value, int index)
 
 	T tmp = arr[index];
 	arr[index] = value;
-	for (int i = index+1; i < size; ++i)
+	for (int i = index + 1; i < size; ++i)
 	{
 		std::swap(tmp, arr[i]);
 	}
+}
+
+template<class T>
+T& Array<T>::operator[](int index)
+{
+	if ((index < 0) || (index >= size)) throw std::out_of_range("Invalid index");
+	return arr[index];
 }

@@ -103,3 +103,9 @@ T Array<T>::pop(int index)
 	for (int i = index; i < size - 1; ++i) arr[i] = arr[i + 1];
 	return result;
 }
+
+template<class T>
+int Array<T>::get_size() const noexcept { return size; }
+
+template<class T>
+int Array<T>::get_capacity() const noexcept { return capacity; }

@@ -5,7 +5,7 @@ Array<T>::Array() :
 	size(0), capacity(1), arr(new T[1]) {};
 
 template<class T>
-Array<T>::Array(std::initializer_list<T> arr):
+Array<T>::Array(std::initializer_list<T> arr) :
 	size(arr.size()), capacity(arr.size()),
 	arr(new T[size])
 {
@@ -28,7 +28,7 @@ Array<T>::~Array()
 }
 
 template<class T>
-Array<T>::Array(const Array<T>& other):
+Array<T>::Array(const Array<T>& other) :
 	size(other.size), capacity(other.capacity),
 	arr(new T[capacity])
 {
@@ -50,8 +50,8 @@ Array<T>& Array<T>::operator=(const Array<T>& other)
 }
 
 template<class T>
-Array<T>::Array(Array<T>&& other):
-	size(other.size),capacity(other.capacity),
+Array<T>::Array(Array<T>&& other) :
+	size(other.size), capacity(other.capacity),
 	arr(other.arr)
 {
 	other.arr = nullptr;
@@ -60,7 +60,7 @@ Array<T>::Array(Array<T>&& other):
 template<class T>
 Array<T>& Array<T>::operator=(Array<T>&& other)
 {
-	if(other == *this) return *this;
+	if (other == *this) return *this;
 
 	size = other.size;
 	capacity = other.capacity;
@@ -80,6 +80,26 @@ void Array<T>::push_back(T value)
 		arr = new T[capacity];
 
 		for (int i = 0; i < size - 1; ++i) arr[i] = old_arr[i];
+		delete[] old_arr;
 	}
 	arr[size - 1] = value;
+}
+
+template<class T>
+T Array<T>::pop(int index)
+{
+	--size;
+	if (size * 2 < capacity)
+	{
+		capacity /= 2;
+		T* old_arr = arr;
+		arr = new T[capacity];
+
+		for (int i = 0; i < size + 1; ++i)arr[i] = old_arr[i];
+		delete[] old_arr;
+	}
+
+	T result = arr[index];
+	for (int i = index; i < size - 1; ++i) arr[i] = arr[i + 1];
+	return result;
 }

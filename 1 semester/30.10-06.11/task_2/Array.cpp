@@ -50,12 +50,12 @@ template<class T>
 Array<T>::Array() =default;
 
 template<class T>
-Array<T>::Array(std::initializer_list<T> arr) :
-	m_size(arr.size()), m_capacity(arr.size()),
+Array<T>::Array(std::initializer_list<T> array) :
+	m_size(array.size()), m_capacity(array.size()),
 	arr(new T[m_size])
 {
-	int i = 0;
-	for (auto& elem : arr)
+	size_type i = 0;
+	for (auto& elem : array)
 	{
 		arr[i] = elem;
 		++i;

@@ -148,7 +148,7 @@ typename Array<T>::value_type Array<T>::pop(size_type index)
 	}
 
 	value_type result = arr[index];
-	for (size_type i = index; i < m_size - 1; ++i) arr[i] = arr[i + 1];
+	for (size_type i = index; i < m_size+1; ++i) arr[i] = arr[i + 1];
 	return result;
 }
 

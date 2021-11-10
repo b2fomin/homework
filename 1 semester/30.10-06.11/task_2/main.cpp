@@ -1,4 +1,4 @@
-#include "Array.hpp"
+#include "Array.cpp"
 
 int main()
 {
@@ -11,7 +11,7 @@ int main()
 	std::cout << arr << std::endl;
 	arr.resize(8);
 	std::cout << arr << std::endl;
-	arr.insert(4, 2);
+	arr.insert(10, 2);
 	std::cout << arr << std::endl;
 	return 0;
 }

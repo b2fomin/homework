@@ -35,8 +35,10 @@ public:
 	iterator begin() noexcept;
 	iterator end() noexcept;
 
-	friend std::ostream& operator<<(std::ostream&, const Array<T>);
-	friend Array<T> operator+(const Array<T>&, const Array<T>&);
+	template<class U>
+	friend std::ostream& operator<<(std::ostream&, const Array<U>);
+	template<class U>
+	friend Array<U> operator+(const Array<U>&, const Array<U>&);
 	Array<T>& operator+=(const Array<T>&);
 	reference operator[](size_type);
 	const_reference operator[](size_type) const;
@@ -77,7 +79,7 @@ Array<T>::Array(const Array<T>& other) :
 	m_size(other.m_size), m_capacity(other.m_capacity),
 	arr(new T[m_capacity])
 {
-	for (int i = 0; i < m_capacity; ++i) arr[i] = other.arr[i];
+	for (size_type i = 0; i < m_capacity; ++i) arr[i] = other.arr[i];
 }
 
 template<class T>
@@ -89,14 +91,14 @@ Array<T>& Array<T>::operator=(const Array<T>& other)
 	m_capacity = other.m_capacity;
 	arr = new T[m_capacity];
 
-	for (int i = 0; i < m_capacity; ++i) arr[i] = other.arr[i];
+	for (size_type i = 0; i < m_capacity; ++i) arr[i] = other.arr[i];
 
 	return *this;
 }
 
 template<class T>
 Array<T>::Array(Array<T>&& other) :
-	m_size(other.m_size), capacity(other.m_capacity),
+	m_size(other.m_size), m_capacity(other.m_capacity),
 	arr(other.arr)
 {
 	other.arr = nullptr;
@@ -124,14 +126,14 @@ void Array<T>::push_back(value_type value)
 		iterator old_arr = arr;
 		arr = new T[m_capacity];
 
-		for (int i = 0; i < m_size - 1; ++i) arr[i] = old_arr[i];
+		for (size_type i = 0; i < m_size - 1; ++i) arr[i] = old_arr[i];
 		delete[] old_arr;
 	}
 	arr[m_size - 1] = value;
 }
 
 template<class T>
-Array<T>::value_type Array<T>::pop(size_type index)
+typename Array<T>::value_type Array<T>::pop(size_type index)
 {
 	if ((index < 0) || (index >= m_size)) throw std::out_of_range("Invalid index");
 	--m_size;
@@ -141,32 +143,32 @@ Array<T>::value_type Array<T>::pop(size_type index)
 		iterator old_arr = arr;
 		arr = new T[m_capacity];
 
-		for (int i = 0; i < m_size + 1; ++i)arr[i] = old_arr[i];
+		for (size_type i = 0; i < m_size + 1; ++i)arr[i] = old_arr[i];
 		delete[] old_arr;
 	}
 
 	value_type result = arr[index];
-	for (int i = index; i < m_size - 1; ++i) arr[i] = arr[i + 1];
+	for (size_type i = index; i < m_size - 1; ++i) arr[i] = arr[i + 1];
 	return result;
 }
 
 template<class T>
-Array<T>::size_type Array<T>::size() const noexcept { return size; }
+typename Array<T>::size_type Array<T>::size() const noexcept { return m_size; }
 
 template<class T>
-Array<T>::size_type Array<T>::capacity() const noexcept { return capacity; }
+typename Array<T>::size_type Array<T>::capacity() const noexcept { return m_capacity; }
 
 template<class T>
-Array<T>::const_iterator Array<T>::begin() const noexcept { return arr; }
+typename Array<T>::const_iterator Array<T>::begin() const noexcept { return arr; }
 
 template<class T>
-Array<T>::const_iterator Array<T>::end() const noexcept { return arr + m_size; }
+typename Array<T>::const_iterator Array<T>::end() const noexcept { return arr + m_size; }
 
 template<class T>
-Array<T>::iterator Array<T>::begin() noexcept { return arr; }
+typename Array<T>::iterator Array<T>::begin() noexcept { return arr; }
 
 template<class T>
-Array<T>::iterator Array<T>::end() noexcept { return arr + m_size; }
+typename Array<T>::iterator Array<T>::end() noexcept { return arr + m_size; }
 
 template<class T>
 void Array<T>::resize(size_type new_size)
@@ -180,7 +182,7 @@ void Array<T>::resize(size_type new_size)
 	iterator old_arr = arr;
 	arr = new T[m_capacity];
 
-	for (int i = 0; i < old_size; ++i) arr[i] = old_arr[i];
+	for (size_type i = 0; i < old_size; ++i) arr[i] = old_arr[i];
 	delete[] old_arr;
 }
 
@@ -195,27 +197,27 @@ void Array<T>::insert(value_type value, size_type index)
 		iterator old_arr = arr;
 		arr = new T[m_capacity];
 
-		for (int i = 0; i < m_size - 1; ++i) arr[i] = old_arr[i];
+		for (size_type i = 0; i < m_size - 1; ++i) arr[i] = old_arr[i];
 		delete[] old_arr;
 	}
 
 	value_type tmp = arr[index];
 	arr[index] = value;
-	for (int i = index + 1; i < m_size; ++i)
+	for (size_type i = index + 1; i < m_size; ++i)
 	{
 		std::swap(tmp, arr[i]);
 	}
 }
 
 template<class T>
-Array<T>::reference Array<T>::operator[](size_type index)
+typename Array<T>::reference Array<T>::operator[](size_type index)
 {
 	if ((index < 0) || (index >= m_size)) throw std::out_of_range("Invalid index");
 	return arr[index];
 }
 
 template<class T>
-Array<T>::const_reference Array<T>::operator[](size_type index) const
+typename Array<T>::const_reference Array<T>::operator[](size_type index) const
 {
 	if ((index < 0) || (index >= m_size)) throw std::out_of_range("Invalid index");
 	return arr[index];
@@ -224,7 +226,7 @@ Array<T>::const_reference Array<T>::operator[](size_type index) const
 template<class T>
 std::ostream& operator<<(std::ostream& out, const Array<T> arr)
 {
-	for (auto& elem : arr.arr) out << elem << '\t';
+	for (typename Array<T>::size_type i = 0; i < arr.size();++i) out << arr.arr[i] << '\t';
 	return out;
 }
 
@@ -235,7 +237,7 @@ Array<T> operator+(const Array<T>& left, const Array<T>& right)
 	new_arr.m_size = left.m_size + right.m_size;
 	new_arr.m_capacity = left.m_capacity + right.m_capacity;
 	new_arr.arr = new T[new_arr.m_capacity];
-	int i = 0;
+	typename Array<T>::size_type i = 0;
 	for (i; i < left.m_size; ++i) new_arr[i] = left.arr[i];
 	for (i; i < new_arr.m_size; ++i) new_arr[i] = right.arr[i - left.m_size];
 

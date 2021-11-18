@@ -5,7 +5,7 @@ struct add_const
 };
 
 template<typename T>
-using add_const_t = add_const<T>::type;
+using add_const_t = typename add_const<T>::type;
 
 template<typename T>
 struct remove_const
@@ -20,5 +20,5 @@ struct remove_const<const T>
 };
 
 template<typename T>
-using remove_const_t = remove_using<T>::type;
+using remove_const_t = typename remove_const<T>::type;
 

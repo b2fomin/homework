@@ -1,10 +1,7 @@
 #include<functional>
 
 template<typename T>
-struct decay
-{
-	using type = T;
-};
+struct decay;
 
 template<typename Return, typename... Args>
 struct decay<const std::function<Return(Args...)>>

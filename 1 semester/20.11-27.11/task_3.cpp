@@ -20,19 +20,14 @@ struct factorial<0>
 };
 
 template<std::size_t accuracy>
-struct e
+constexpr long double e()
 {
-	static constexpr long double value = 1.0 / factorial<accuracy>::value + e<accuracy - 1>::value;
-};
-
-template<>
-struct e<0>
-{
-	static constexpr double value = 1.0;
+	if constexpr (!accuracy) return 1.0;
+	else return 1.0 / factorial<accuracy>::value + e<accuracy - 1>();
 };
 
 int main()
 {
-	std::cout << std::setprecision(20) << e<60>::value;
+	std::cout << std::setprecision(20) << e<60>();
 	return 0;
 }

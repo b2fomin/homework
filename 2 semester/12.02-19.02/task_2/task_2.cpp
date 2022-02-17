@@ -80,5 +80,31 @@ int main()
 
 	/////////////////////////////////////////////////////////////
 	
+	Stopwatch mywatch;
+	mywatch.start();
+	std::sort(vector1.begin(),vector1.end());
+	std::cout << "vector std::sort: " << mywatch.time() << std::endl;
+	mywatch.reset();
+
+	mywatch.start();
+	std::sort(array1.begin(), array1.end());
+	std::cout << "array std::sort: " << mywatch.time() << std::endl;
+	mywatch.reset();
+
+	mywatch.start();
+	std::sort(deque1.begin(), deque1.end());
+	std::cout << "deque std::sort: " << mywatch.time() << std::endl;
+	mywatch.reset();
+
+	mywatch.start();
+	list1.sort();
+	std::cout << "list own sort: " << mywatch.time()<<std::endl;
+	mywatch.reset();
+
+	mywatch.start();
+	forward_list1.sort();
+	std::cout << "forward_list own sort: " << mywatch.time() << std::endl;
+	mywatch.reset();
+
 	return 0;
 }

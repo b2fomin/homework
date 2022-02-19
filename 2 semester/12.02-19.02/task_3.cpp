@@ -29,7 +29,8 @@ auto create_multi_array(std::vector<T2>& vector)
 }
 
 template<typename T1, const int Dimensions, typename T2>
-auto fill_multi_array(std::vector<T2>& vector, boost::multi_array<T1, Dimensions>& multi_arr, int dimension = 0, std::vector<int> position=std::vector<int>(Dimensions))
+auto fill_multi_array(std::vector<T2>& vector, boost::multi_array<T1, Dimensions>& multi_arr,
+					int dimension = 0, std::vector<int> position=std::vector<int>(Dimensions))
 {
 
 	for (std::size_t i = 0; i < vector.size(); ++i)
@@ -41,7 +42,8 @@ auto fill_multi_array(std::vector<T2>& vector, boost::multi_array<T1, Dimensions
 }
 
 template<typename T1, const int Dimensions, typename T2>
-auto fill_multi_array(std::vector<std::vector<T2>>& vector, boost::multi_array<T1, Dimensions>& multi_arr, int dimension=0, std::vector<int> position=std::vector<int>(Dimensions))
+auto fill_multi_array(std::vector<std::vector<T2>>& vector, boost::multi_array<T1, Dimensions>& multi_arr,
+					int dimension=0, std::vector<int> position=std::vector<int>(Dimensions))
 {
 	for (std::size_t i = 0; i < vector.size(); ++i)
 	{
@@ -56,7 +58,7 @@ int main()
 	std::vector<std::vector<int>> vector{ {1,2,3}, {4,5,6}, {7,8,9} };
 
 	auto multi_arr = create_multi_array<int, 2>(vector);
-	fill_multi_array<int, 2>(vector, multi_arr);
+	fill_multi_array(vector, multi_arr);
 	for (int i = 0; i < 3; ++i)
 	{
 		for (int j = 0; j < 3; ++j)

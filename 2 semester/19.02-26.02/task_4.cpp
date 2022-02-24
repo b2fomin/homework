@@ -38,5 +38,16 @@ int main()
 	phone_owners.insert({"Качанов", "Иван", "Михайлович", "670-04-56"});
 	phone_owners.insert({"Тувин", "Даниил", "Александрович", "670-05-43"});
 
+	auto& surnames = phone_owners.get<1>();
+	std::cout << surnames.count("Качанов")<<std::endl;
+
+	auto iterator = surnames.find("Тувин");
+	surnames.modify(iterator, [](Phone_Owner& phone_owner) { phone_owner.surname = "Иванов"; });
+
+	auto& ordered_phone_owners = phone_owners.get<0>();
+
+	for (auto& elem : ordered_phone_owners)
+		std::cout << elem.surname << " " << elem.name << " " << elem.patronymic << " " << elem.number << std::endl;
+
 	return 0;
 }

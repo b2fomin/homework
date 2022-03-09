@@ -25,9 +25,10 @@ int main()
 	arr.erase(std::unique(arr.begin(), arr.end()), arr.end());// can be deleted
 	for (int i = 0; i < arr.size(); ++i)
 	{
-		arr.erase(std::remove(arr.begin() + i, arr.end(), arr[i]), arr.end());
+		arr.erase(std::remove(arr.begin() + i+1, arr.end(), arr[i]), arr.end());
 	}
 
+	std::cout << std::count_if(arr.begin(), arr.end(), [](const auto& elem) {return elem % 2; }) << std::endl;
 
 	return 0;
 }

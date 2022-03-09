@@ -1,6 +1,8 @@
 #include<iostream>
 #include<vector>
 #include<string>
+#include<algorithm>
+#include<random>
 
 int main()
 {
@@ -15,6 +17,10 @@ int main()
 		arr.push_back(number);
 		
 	}
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::shuffle(arr.begin(), arr.end(), gen);
 
 	return 0;
 }

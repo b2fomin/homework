@@ -61,5 +61,9 @@ int main()
 			return true;
 		}) << std::endl;
 
+	std::transform(arr.begin(), arr.end(), arr.begin(), [](const auto& elem) {return elem * elem; });
+
+	print_vector(arr);
+
 	return 0;
 }

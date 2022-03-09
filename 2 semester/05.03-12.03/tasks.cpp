@@ -22,5 +22,12 @@ int main()
 	std::mt19937 gen(rd());
 	std::shuffle(arr.begin(), arr.end(), gen);
 
+	arr.erase(std::unique(arr.begin(), arr.end()), arr.end());// can be deleted
+	for (int i = 0; i < arr.size(); ++i)
+	{
+		arr.erase(std::remove(arr.begin() + i, arr.end(), arr[i]), arr.end());
+	}
+
+
 	return 0;
 }

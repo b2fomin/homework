@@ -105,6 +105,20 @@ int main()
 
 	print_vector(arr2);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	std::cout << "Task 12:" << std::endl;
+
+	std::vector<int> arr_copy(arr.size()), arr2_copy(arr2.size()), arr3;
+
+	std::copy(arr.begin(), arr.end(), arr_copy.begin());
+	std::copy(arr2.begin(), arr2.end(), arr2_copy.begin());
+
+	std::sort(arr_copy.begin(), arr_copy.end());
+	std::sort(arr2_copy.begin(), arr2_copy.end());
+
+	std::set_difference(arr_copy.begin(), arr_copy.end(), arr2_copy.begin(), arr2_copy.end(), std::inserter(arr3, arr3.begin()));
+
+	print_vector(arr3);
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	return 0;
 }

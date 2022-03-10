@@ -141,6 +141,15 @@ int main()
 
 	print_vector(arr3);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	std::cout << "Task 16:" << std::endl;
+
+	auto max_arr = std::max_element(arr3.begin(), arr3.end());
+	std::cout << "1st max: " << *max_arr << ", ";
+	max_arr = max(std::max_element(arr3.begin(), max_arr), std::max_element(max_arr + 1, arr3.end()));
+	std::cout << "2nd max: " << *max_arr << ", ";
+	max_arr = max(std::max_element(arr3.begin(), max_arr), std::max_element(max_arr + 1, arr3.end()));
+	std::cout << "3rd max: " << *max_arr << std::endl;
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	return 0;
 }

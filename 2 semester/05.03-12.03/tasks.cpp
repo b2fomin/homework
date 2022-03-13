@@ -4,6 +4,7 @@
 #include<algorithm>
 #include<random>
 #include<numeric>
+#include<sstream>
 
 template<typename T>
 void print_vector(std::vector<T>& arr)
@@ -25,13 +26,12 @@ int main()
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	std::cout << "Task 2:" << std::endl;
 
-	while (std::cin.peek() != '\n')
-	{
-		int number;
-		std::cin >> number;
-		arr.push_back(number);
+	std::string string;
+	std::getline(std::cin, string);
+	static_cast<std::istringstream>(string);
+	std::istringstream input(string);
 
-	}
+	std::for_each(std::istream_iterator<int>(input), std::istream_iterator<int>(), [&arr](const auto elem) {arr.push_back(elem); });
 
 	print_vector(arr);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

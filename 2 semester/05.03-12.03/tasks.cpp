@@ -6,7 +6,7 @@
 #include<numeric>
 
 template<typename T>
-void print_vector(std::vector<T> arr)
+void print_vector(std::vector<T>& arr)
 {
 	for (auto& elem : arr)
 		std::cout << elem << " ";
@@ -18,9 +18,8 @@ int main()
 {
 	std::cout << "Task 1:" << std::endl;
 
-	std::vector<int> arr;
-	for (int i = 1; i <= 10; ++i)
-		arr.push_back(i);
+	std::vector<int> arr(10);
+	std::generate(arr.begin(), arr.end(), [index = 0]() mutable {return ++index; });
 
 	print_vector(arr);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +46,7 @@ int main()
 	std::cout << "Task 4:" << std::endl;
 
 	arr.erase(std::unique(arr.begin(), arr.end()), arr.end());// can be deleted
-	for (int i = 0; i < arr.size(); ++i)
+	for (std::size_t i = 0; i < arr.size(); ++i)
 	{
 		arr.erase(std::remove(arr.begin() + i + 1, arr.end(), arr[i]), arr.end());
 	}
@@ -69,7 +68,7 @@ int main()
 			if (elem <= 1)
 				return false;
 
-			for (int i = 2; i * i <= elem; ++i)
+			for (std::size_t i = 2; i * i <= elem; ++i)
 				if (elem % i == 0)
 					return false;
 
@@ -90,7 +89,7 @@ int main()
 
 	std::vector<int> arr2;
 
-	for (int i = 0; i < arr.size(); ++i)
+	for (std::size_t i = 0; i < arr.size(); ++i)
 		arr2.push_back(gen() % 1000);
 
 	print_vector(arr2);

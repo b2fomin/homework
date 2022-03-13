@@ -29,14 +29,14 @@ int main()
 	std::string string;
 	std::getline(std::cin, string);
 	static_cast<std::istringstream>(string);
-	std::istringstream input(string);
+	std::istringstream input{ string };
 
-	std::for_each(std::istream_iterator<int>(input), std::istream_iterator<int>(), [&arr](const auto elem) {arr.push_back(elem); });
+	std::for_each(std::istream_iterator<int>(input), std::istream_iterator<int>(), [&arr](const auto& elem) {arr.push_back(elem); });
 
 	print_vector(arr);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	std::cout << "Task 3:" << std::endl;
-	
+
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::shuffle(arr.begin(), arr.end(), gen);
@@ -45,11 +45,12 @@ int main()
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	std::cout << "Task 4:" << std::endl;
 
-	arr.erase(std::unique(arr.begin(), arr.end()), arr.end());// can be deleted
-	for (std::size_t i = 0; i < arr.size(); ++i)
-	{
-		arr.erase(std::remove(arr.begin() + i + 1, arr.end(), arr[i]), arr.end());
-	}
+	std::vector<int> arr_copy(arr.size());
+	std::copy(arr.begin(), arr.end(), arr_copy.begin());
+	std::sort(arr_copy.begin(), arr_copy.end());
+	std::unique(arr_copy.begin(), arr_copy.end());
+	std::for_each(arr_copy.begin(), arr_copy.end(),
+		[&arr](const auto& elem) {arr.erase(std::remove(std::find(arr.begin(), arr.end(), elem) + 1, arr.end(), elem), arr.end()); });
 
 	print_vector(arr);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,7 +59,7 @@ int main()
 	std::cout << std::count_if(arr.begin(), arr.end(), [](const auto& elem) {return elem % 2; }) << std::endl;
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	std::cout << "Task 6:" << std::endl;
-	
+
 	std::cout << "min: " << *std::min_element(arr.begin(), arr.end()) << ", max: " << *std::max_element(arr.begin(), arr.end()) << std::endl;
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	std::cout << "Task 7:" << std::endl;
@@ -106,7 +107,9 @@ int main()
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	std::cout << "Task 12:" << std::endl;
 
-	std::vector<int> arr_copy(arr.size()), arr2_copy(arr2.size()), arr3;
+	std::vector<int> arr2_copy(arr2.size()), arr3;
+	arr_copy.clear();
+	arr_copy.resize(arr.size());
 
 	std::copy(arr.begin(), arr.end(), arr_copy.begin());
 	std::copy(arr2.begin(), arr2.end(), arr2_copy.begin());

@@ -82,8 +82,8 @@ void Translator::translate_from_rus_into_en(std::u32string& string)
 		std::u32string string2;
 		string2.clear();
 		string2 += elem;
-		auto iterator = symbol_arr.get<1>().find(string2);
-		if (iterator!=symbol_arr.get<1>().end())
+		auto iterator = symbol_arr.find(string2);
+		if (iterator!=symbol_arr.end())
 			string += iterator->latin;
 	}
 }

@@ -17,9 +17,9 @@ private:
 	using symbol_multi_index =boost::multi_index::multi_index_container <
 		Symbol, boost::multi_index::indexed_by <
 		boost::multi_index::hashed_non_unique <
-		boost::multi_index::member < Symbol, std::u32string, &Symbol::latin > >,
+		boost::multi_index::member < Symbol, std::u32string, &Symbol::ñyrillic > >,
 		boost::multi_index::hashed_non_unique <
-		boost::multi_index::member < Symbol, std::u32string, &Symbol::ñyrillic > > > >;
+		boost::multi_index::member < Symbol, std::u32string, &Symbol::latin > > > >;
 
 	static symbol_multi_index symbol_arr;
 

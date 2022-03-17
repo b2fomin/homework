@@ -13,10 +13,14 @@ int main()
 	std::cin.imbue(sys_locale);
 	std::cin >> string;
 
-	boost::locale::conv::to_utf<char>(string, sys_locale);
-	boost::locale::conv::utf_to_utf<wchar_t>(string);
+	string = boost::locale::conv::to_utf<char>(string, sys_locale);
+	auto string2=boost::locale::conv::utf_to_utf<char32_t>(string);
 
-	Translator::translate_from_rus_into_en(string);
+	Translator::translate_from_rus_into_en(string2);
+
+	string=boost::locale::conv::utf_to_utf<char>(string2);
+	string = boost::locale::conv::from_utf<char>(string, sys_locale);
+	std::cout << string;
 
 	return 0;
 }

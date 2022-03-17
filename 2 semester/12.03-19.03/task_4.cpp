@@ -21,5 +21,16 @@ int main()
 				std::cout << m[0] << std::endl;
 		});
 
+	std::cout << std::endl << "Time:" << std::endl;
+
+	std::for_each(std::sregex_iterator(data.cbegin(), data.cend(), pattern2), std::sregex_iterator(), [](const std::smatch& m)
+		{
+			int hours = std::stoi(m[1]);
+			int minutes = std::stoi(m[2]);
+			int seconds = std::stoi(m[3]);
+			if (hours < 24 && minutes < 60 && seconds < 60)
+				std::cout << m[0] << std::endl;
+		});
+
 	return 0;
 }

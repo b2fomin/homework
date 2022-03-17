@@ -1,10 +1,12 @@
 #include"Translation.hpp"
 
+Translator::symbol_multi_index Translator::symbol_arr{};
+
 Translator::Translator()=default;
 
 void Translator::fill_symbol_arr()
 {
-	symbol_arr.insert({ "à", "a" });
+	symbol_arr.insert({ "à", "a"});
 	symbol_arr.insert({ "á", "b" });
 	symbol_arr.insert({ "â", "v" });
 	symbol_arr.insert({ "ã", "g" });
@@ -73,7 +75,12 @@ void Translator::translate_from_rus_into_en(std::string& string)
 	if (symbol_arr.empty()) fill_symbol_arr();
 	std::string old_string{ string };
 	string.clear();
-	for (auto& elem : old_string) string += symbol_arr.find(elem)->latin;
+	for (auto& elem : old_string)
+	{
+		auto iterator = symbol_arr.find(std::to_string(elem));
+		if (iterator!=symbol_arr.end())
+			string += iterator->latin;
+	}
 }
 
 void Translator::translate_from_en_into_rus(std::string& string)
@@ -81,5 +88,10 @@ void Translator::translate_from_en_into_rus(std::string& string)
 	if (symbol_arr.empty()) fill_symbol_arr();
 	std::string old_string{ string };
 	string.clear();
-	for (auto& elem : old_string) string += symbol_arr.get<1>().find(elem)->ñyrillic;
+	for (auto& elem : old_string)
+	{
+		auto iterator = symbol_arr.get<1>().find(std::to_string(elem));
+		if (iterator != symbol_arr.get<1>().end())
+			string += iterator->ñyrillic;
+	}
 }

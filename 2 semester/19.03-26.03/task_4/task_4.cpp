@@ -26,7 +26,6 @@ int main()
 	std::vector<Human> humans;
 	Human human;
 	while (std::cin >> std::boolalpha >> human) humans.push_back(human);
-	humans.push_back(human);
 
 	std::vector<nlohmann::json> jsons;
 
@@ -39,7 +38,7 @@ int main()
 		j["happy"] = elem.happy;
 		jsons.push_back(j);
 	}
-
+	std::filesystem::remove_all(std::filesystem::current_path() / "task_4" / "JSON");
 	std::filesystem::create_directory(std::filesystem::current_path() / "task_4" / "JSON");
 
 	for (std::size_t i = 0; i < jsons.size(); ++i)

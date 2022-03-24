@@ -38,12 +38,12 @@ int main()
 		j["happy"] = elem.happy;
 		jsons.push_back(j);
 	}
-	std::filesystem::remove_all(std::filesystem::current_path() / "task_4" / "JSON");
-	std::filesystem::create_directory(std::filesystem::current_path() / "task_4" / "JSON");
+	std::filesystem::remove_all(std::filesystem::current_path() / "JSON");
+	std::filesystem::create_directory(std::filesystem::current_path() / "JSON");
 
 	for (std::size_t i = 0; i < jsons.size(); ++i)
 	{
-		std::fstream("./task_4/JSON/file_" + std::to_string(i) + ".txt", std::ios_base::out) << jsons[i];
+		std::fstream("./JSON/file_" + std::to_string(i) + ".txt", std::ios_base::out) << jsons[i];
 	}
 
 	return 0;

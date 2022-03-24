@@ -1,6 +1,8 @@
 #include<iostream>
 #include<vector>
 
+#include"json.hpp"
+
 struct Human
 {
 	std::size_t age;
@@ -8,7 +10,7 @@ struct Human
 	std::string surname;
 	std::vector<std::string> card_id;
 
-	friend std::istream& operator>>(std::istream&, Human);
+	friend std::istream& operator>>(std::istream&, Human&);
 };
 
 std::istream& operator>> (std::istream& in, Human& human)
@@ -20,5 +22,21 @@ std::istream& operator>> (std::istream& in, Human& human)
 
 int main()
 {
+	std::vector<Human> humans;
+	Human human;
+	while (std::cin >> human) humans.push_back(human);
+
+	std::vector<nlohmann::json> jsons;
+
+	for (auto& elem : humans)
+	{
+		nlohmann::json j;
+		j["age"] = elem.age;
+		j["name"] = elem.name;
+		j["surname"] = elem.surname;
+		j["card_id"] = elem.card_id;
+		jsons.push_back(j);
+	}
+
 	return 0;
 }

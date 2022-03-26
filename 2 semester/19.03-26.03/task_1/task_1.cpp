@@ -1,35 +1,26 @@
 #include<iostream>
 #include<fstream>
-#include<sstream>
 #include<filesystem>
+#include<string>
+#include<regex>
 
 int main()
 {
-	std::fstream file("algorithm.txt", std::ios_base::in);
+	std::fstream file("./task_1/test.txt", std::ios_base::in);
 
-	char ch;
-	std::stringstream data;
+	std::string data;
 
-	while (file.get(ch))
+	while (!file.eof())
 	{
-		if (ch == '/')
-		{
-			if (file.peek() == '*')
-			{
-				while (!(file.get() == '*' && file.seekg(1, std::ios_base::cur).get() == '/'));
-			}
-			else if (file.peek() == '/')
-			{
-				while (file.get() != '\n');
-			}
-			else data << ch;
-		}
-		else data << ch;
+		data += file.get();
 	}
-	file.close();
 
-	file.open("algorithm.txt", std::ios_base::out);
-	file << data.str();
-	
+	std::regex pattern(R"((/\*(([^(\*/)])*)\*/)|(//(.*)$))");
+
+	file.close();
+	file.open("./task_1/test.txt", std::ios_base::out);
+	file << std::regex_replace(data, pattern, "");
+
+
 	return 0;
 }

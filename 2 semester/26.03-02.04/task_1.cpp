@@ -45,5 +45,11 @@ double parallel_integrate(double (*func)(double), double a, double b, double eps
 
 int main()
 {
+	auto func = [](double x) {return sqrt(1 - x * x); };
+
+	auto pi = 2 * parallel_integrate(func, -1, 1,);
+
+	std::cout << std::setprecision(10) << pi << std::endl;
+
 	return 0;
 }

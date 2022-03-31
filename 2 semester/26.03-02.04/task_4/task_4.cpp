@@ -38,5 +38,21 @@ int main()
 	std::cout << "not_parallel_sort: " << mywatch.time() << std::endl;
 	mywatch.reset();
 
+	std::cout << std::endl;
+
+	auto func2 = [](int& elem) {return elem % 2; };
+
+	mywatch.start();
+	std::remove_if(std::execution::par, data.begin(), data.end(), func2);
+	mywatch.stop();
+	std::cout << "parallel_remove_if: " << mywatch.time() << std::endl;
+	mywatch.reset();
+
+	mywatch.start();
+	std::remove_if(std::execution::seq, data.begin(), data.end(), func2);
+	mywatch.stop();
+	std::cout << "not_parallel_remove_if: " << mywatch.time() << std::endl;
+	mywatch.reset();
+
 	return 0;
 }

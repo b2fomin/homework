@@ -1,5 +1,7 @@
 #include<iostream>
 #include<vector>
+#include<thread>
+#include<mutex>
 
 std::vector<int> prefix_function(const std::string& s)
 {
@@ -18,16 +20,19 @@ std::vector<int> prefix_function(const std::string& s)
 	return std::move(pi);
 }
 
-std::vector<int> find(const std::string& sample, const std::string& text, const char delimeter='#')
+void find(const std::string& sample, const std::string& text, std::vector<int>& index, const char delimeter='#')
 {
+	std::mutex mutex;
 	int length = sample.size();
 	std::string str_for_search = sample +delimeter + text;
 	auto pi = prefix_function(str_for_search);
 	std::vector<int> index;
 	for (int i=2*length;i<pi.size();++i)
 	{
-		if (pi[i] == length) index.push_back(i - 2 * length);
+		if (pi[i] == length)
+		{
+			std::lock_guard<std::mutex> lock(mutex);
+			index.push_back(i - 2 * length);
+		}
 	}
-
-	return index;
 }

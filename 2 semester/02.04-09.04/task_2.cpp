@@ -15,5 +15,19 @@ std::vector<int> prefix_function(const std::string& s)
 		pi[i] = j;
 	}
 
-	return pi;
+	return std::move(pi);
+}
+
+std::vector<int> find(const std::string& sample, const std::string& text, const char delimeter='#')
+{
+	int length = sample.size();
+	std::string str_for_search = sample +delimeter + text;
+	auto pi = prefix_function(str_for_search);
+	std::vector<int> index;
+	for (int i=2*length;i<pi.size();++i)
+	{
+		if (pi[i] == length) index.push_back(i - 2 * length);
+	}
+
+	return index;
 }

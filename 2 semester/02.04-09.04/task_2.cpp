@@ -7,7 +7,7 @@
 
 std::vector<int> prefix_function(const std::string& s)
 {
-	std::vector<int> pi(s.size(), 0);
+	std::vector<int> pi(s.size());
 
 	for (int i = 1; i < pi.size(); ++i)
 	{
@@ -22,19 +22,18 @@ std::vector<int> prefix_function(const std::string& s)
 	return pi;
 }
 
-void find(const std::string& sample, const std::string& text, std::vector<int>& index, const char delimeter='#')
+void find(const std::string& text, const std::string& sample, std::vector<int>& index, std::size_t shift = 0, const char delimeter = '#')
 {
 	std::mutex mutex;
 	int length = sample.size();
-	std::string str_for_search = sample +delimeter + text;
+	std::string str_for_search = sample + delimeter + text;
 	auto pi = prefix_function(str_for_search);
-	std::vector<int> index;
-	for (int i=2*length;i<pi.size();++i)
+	for (int i = 2 * length; i < pi.size(); ++i)
 	{
 		if (pi[i] == length)
 		{
 			std::lock_guard<std::mutex> lock(mutex);
-			index.push_back(i - 2 * length);
+			index.push_back(i - 2 * length + shift);
 		}
 	}
 }
@@ -47,15 +46,16 @@ std::vector<int> parallel_find(const std::string& sample, const std::string& tex
 
 	std::vector<std::thread> threads(num_threads - 1);
 	std::size_t block_size = text.size() / num_threads;
-	auto left = text.begin(), right=left;
+	auto begin=text.begin(), left = begin, right = left;
 	std::advance(right, block_size);
 	std::vector<int> index;
 
 	for (int i = 0; i < threads.size(); ++i)
 	{
 		std::string string;
-		std::copy(left, right, string);
-		threads[i] = std::thread(find, sample, string, index, delimeter);
+		for (auto iter = left; iter != right; ++iter) string += *iter;
+
+		threads[i] = std::thread(find, string, sample, std::ref(index), std::distance(begin, left), delimeter);
 
 		std::advance(left, block_size);
 		std::advance(right, block_size);
@@ -64,9 +64,37 @@ std::vector<int> parallel_find(const std::string& sample, const std::string& tex
 	std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
 
 	std::string string;
-	std::copy(left, right, string);
-	find(sample, string, index, delimeter);
+	for (auto iter = left; iter != right; ++iter) string += *iter;
+
+	find(string, sample, index, std::distance(begin, left), delimeter);
 
 	std::sort(index.begin(), index.end());
 	return index;
+}
+
+std::string generate_DNA(const std::size_t size)
+{
+	std::string letters = "AGTC";
+	std::string DNA;
+
+	for (int i = 0; i < size; ++i)
+	{
+		DNA.push_back(letters[std::rand() % letters.size()]);
+	}
+
+	return DNA;
+}
+
+int main()
+{
+	std::size_t size = pow(10, 3);
+	std::string DNA = generate_DNA(size);
+	std::cout << DNA << std::endl;
+	std::string sample;
+
+	std::cout << "Enter sample: ";
+	std::cin >> sample;
+
+	auto index = parallel_find(sample, DNA);
+	for (auto& elem : index) std::cout << elem << std::endl;
 }

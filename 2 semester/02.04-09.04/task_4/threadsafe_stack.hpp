@@ -1,8 +1,6 @@
-#include <exception>
-#include <memory>
 #include <mutex>
 #include <stack>
-#include <stdexcept>
+#include<condition_variable>
 
 template < typename T >
 class Threadsafe_Stack
@@ -21,35 +19,18 @@ public:
 
 public:
 
-	void push(T value)
+	void push(T& value)
 	{
 		std::lock_guard < std::mutex > lock(m_mutex);
 		m_data.push(value);
+		m_condition_variable.notify_one();
 	}
 
-	std::shared_ptr < T > pop()
+	void pop(T& value)
 	{
-		std::lock_guard < std::mutex > lock(m_mutex);
+		std::unique_lock < std::mutex > lock(m_mutex);
 
-		if (m_data.empty())
-		{
-			throw std::range_error("empty stack");
-		}
-
-		const auto result = std::make_shared < T > (m_data.top());
-		m_data.pop();
-
-		return result;
-	}
-
-	void pop(T & value)
-	{
-		std::lock_guard < std::mutex > lock(m_mutex);
-
-		if (m_data.empty())
-		{
-			return;
-		}
+		m_condition_variable.wait(lock, [this] {return !m_data.empty(); });
 
 		value = m_data.top();
 		m_data.pop();
@@ -64,8 +45,6 @@ public:
 private:
 
 	std::stack < T > m_data;
-
-private:
-
+	std::condition_variable m_condition_variable;
 	mutable std::mutex m_mutex;
 };

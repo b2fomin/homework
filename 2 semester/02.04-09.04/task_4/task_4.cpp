@@ -68,6 +68,6 @@ int main()
 	std::cout << "Custom stack: " << test(N, M, custom_stack) << std::endl;
 
 	std::cout << "Boost queue: " << test(N, M, boost_queue) << std::endl;
-	std::cout << "Custom queue: " << test(N, M, custom_stack) << std::endl;
+	std::cout << "Custom queue: " << test(N, M, custom_queue) << std::endl;
 	return 0;
 }

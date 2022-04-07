@@ -20,6 +20,9 @@ public:
 	Priority_queue(const_reference);
 	reference operator=(const_reference);
 	
+	const value_type& top() const noexcept;
+	bool empty() const noexcept;
+	size_type size() const noexcept;
 };
 
 template<typename T>
@@ -34,4 +37,25 @@ typename Priority_queue<T>::reference Priority_queue<T>::operator=(const_referen
 {
 	std::scoped_lock lock(m_mutex, other.m_mutex);
 	m_prior_queue = other.m_prior_queue;
+}
+
+template<typename T>
+typename const Priority_queue<T>::value_type& Priority_queue<T>::top() const noexcept
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+	return m_prior_queue.top();
+}
+
+template<typename T>
+bool Priority_queue<T>::empty() const noexcept
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+	return m_prior_queue.empty();
+}
+
+template<typename T>
+typename Priority_queue<T>::size_type Priority_queue<T>::size() const noexcept
+{
+	std::lock_guard<std::mutex> lock(m_mutex);
+	return m_prior_queue.size();
 }

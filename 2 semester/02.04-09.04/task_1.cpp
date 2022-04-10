@@ -7,21 +7,23 @@
 #include<mutex>
 #include<functional>
 
-void points_under_function(double (*func)(double), double a, double b, double min, double max, int N, int& result)
+void integrate(double (*func)(double), double a, double b, double min, double max, int N, double& result)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<double> x_distribution(a, b);
 	std::uniform_real_distribution<double> y_distrbution(min, max);
 	std::mutex mutex;
+	double K{ 0 };
 
 	for (int i = 0; i < N; ++i)
 	{
 		auto x = x_distribution(gen);
 		auto y = y_distrbution(gen);
-		std::lock_guard<std::mutex> lock(mutex);
-		if (y <= func(x)) ++result;
+		if (y <= func(x)) ++K;
 	}
+	std::lock_guard<std::mutex> lock(mutex);
+	result += (max - min) * (b - a) * K / N;
 }
 
 double parallel_integrate(double (*func)(double), double a, double b, double min, double max, int N)
@@ -33,20 +35,20 @@ double parallel_integrate(double (*func)(double), double a, double b, double min
 	std::vector<std::thread> threads(num_threads - 1);
 	double block_size = (b - a) / num_threads;
 	double left = a, right = a + block_size;
-	int K = 0;
+	double result{ 0 };
 
 	for (int i = 0; i < num_threads - 1; ++i)
 	{
-		threads[i] = std::thread(points_under_function, func, left, right, min, max, N / num_threads, std::ref(K));
+		threads[i] = std::thread(integrate, func, left, right, min, max, N / num_threads, std::ref(result));
 
 		left += block_size;
 		right += block_size;
 	}
 	std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
 
-	points_under_function(func, left, right, min, max, N / num_threads, K);
+	integrate(func, left, right, min, max, N / num_threads, result);
 
-	return (max - min) * (b - a) * K / N;
+	return result;
 }
 
 int main()

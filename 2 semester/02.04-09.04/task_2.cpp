@@ -5,10 +5,11 @@
 #include<algorithm>
 #include<functional>
 #include<ctime>
+#include<condition_variable>
 
-std::vector<int> prefix_function(const std::string& s)
+std::vector<int> prefix_function(const std::string s)
 {
-	std::vector<int> pi(s.size());
+	std::vector<int> pi(s.size(), 0);
 
 	for (int i = 1; i < pi.size(); ++i)
 	{
@@ -23,12 +24,12 @@ std::vector<int> prefix_function(const std::string& s)
 	return pi;
 }
 
-void find(const std::string& text, const std::string& sample, std::vector<int>& index, std::size_t shift = 0, const char delimeter = '#')
+void find(const std::string text, const std::string sample, std::vector<int>& index, std::size_t shift = 0, const char delimeter = '#')
 {
-	std::mutex mutex;
+	static std::mutex mutex;
 	int length = sample.size();
-	std::string str_for_search = sample + delimeter + text;
-	auto pi = prefix_function(str_for_search);
+	auto pi = prefix_function(sample + delimeter + text);
+
 	for (int i = 2 * length; i < pi.size(); ++i)
 	{
 		if (pi[i] == length)
@@ -47,7 +48,7 @@ std::vector<int> parallel_find(const std::string& sample, const std::string& tex
 
 	std::vector<std::thread> threads(num_threads - 1);
 	std::size_t block_size = text.size() / num_threads;
-	auto begin=text.begin(), left = begin, right = left;
+	auto begin = text.begin(), left = begin, right = left;
 	std::advance(right, block_size);
 	std::vector<int> index;
 
@@ -56,7 +57,7 @@ std::vector<int> parallel_find(const std::string& sample, const std::string& tex
 		std::string string;
 		for (auto iter = left; iter != right; ++iter) string += *iter;
 
-		threads[i] = std::thread(find, string, sample, std::ref(index), std::distance(begin, left), delimeter);
+		threads[i] = std::thread(find, std::move(string), sample, std::ref(index), std::distance(begin, left), delimeter);
 
 		std::advance(left, block_size);
 		std::advance(right, block_size);
@@ -67,7 +68,7 @@ std::vector<int> parallel_find(const std::string& sample, const std::string& tex
 	std::string string;
 	for (auto iter = left; iter != right; ++iter) string += *iter;
 
-	find(string, sample, index, std::distance(begin, left), delimeter);
+	find(std::move(string), sample, index, std::distance(begin, left), delimeter);
 
 	std::sort(index.begin(), index.end());
 	return index;

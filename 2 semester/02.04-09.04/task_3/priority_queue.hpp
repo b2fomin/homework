@@ -32,7 +32,7 @@ public:
 template<typename T>
 Priority_queue<T>::Priority_queue(const_reference other)
 {
-	std::lock_guard<std::mutex> lock(m_mutex);
+	std::lock_guard<std::mutex> lock(other.m_mutex);
 	m_prior_queue = other.m_prior_queue;
 }
 

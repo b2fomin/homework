@@ -56,8 +56,8 @@ int test(int N, int M, T& arr)
 
 int main()
 {
-	int N = 3;
-	int M = 1000;
+	int N = 8;
+	int M = 10000;
 	boost::lockfree::stack<int> boost_stack(1);
 	Threadsafe_Stack<int> custom_stack;
 

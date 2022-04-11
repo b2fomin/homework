@@ -4,6 +4,7 @@
 #include<mutex>
 #include<algorithm>
 #include<functional>
+#include<ctime>
 
 std::vector<int> prefix_function(const std::string& s)
 {
@@ -74,6 +75,7 @@ std::vector<int> parallel_find(const std::string& sample, const std::string& tex
 
 std::string generate_DNA(const std::size_t size)
 {
+	std::srand(time(0));
 	std::string letters = "AGTC";
 	std::string DNA;
 

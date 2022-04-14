@@ -52,7 +52,7 @@ int main()
 
 	auto messages = shared_memory.find<My_vector>("messages").first;
 
-	for (auto& message : *messages) std::cout << message[1] << std::endl;
+	for (auto& message : *messages) std::cout << "id: " << message[0]<< "\tmessage: " << message[1] << std::endl;
 
 	while (true)
 	{
@@ -63,7 +63,6 @@ int main()
 
 		if (*input_somewhere && _kbhit())
 		{
-			std::lock_guard<boost::interprocess::interprocess_mutex> lock(*mutex);
 			std::string string;
 			char_string message(shared_memory.get_segment_manager());
 			std::getline(std::cin, string);
@@ -73,6 +72,7 @@ int main()
 
 			value_type message_with_id({ id, message }, shared_memory.get_segment_manager());
 
+			std::lock_guard<boost::interprocess::interprocess_mutex> lock(*mutex);
 			messages->push_back(message_with_id);
 
 			*input_somewhere = false;
@@ -82,7 +82,7 @@ int main()
 		{
 			std::unique_lock<boost::interprocess::interprocess_mutex> lock(*mutex);
 			condition->wait(lock, [&messages, &input_somewhere] {return !messages->empty() && !*input_somewhere; });
-			std::cout << (*messages)[messages->size() - 1][1];
+			std::cout << (*messages)[messages->size() - 1][1] << std::endl;
 		}
 	}
 	return 0;

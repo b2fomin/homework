@@ -35,55 +35,62 @@ char_string get_id(char_string string, boost::interprocess::managed_shared_memor
 
 int main()
 {
-
 	const std::string memory_name = "shared_memory";
-
-	boost::interprocess::managed_shared_memory shared_memory(boost::interprocess::open_only, memory_name.c_str());
-	
-	auto number_of_programs = shared_memory.find<int>("number_of_programs").first;
-	++*number_of_programs;
-
-	const std::string mutex_name = "mutex"+std::to_string(*number_of_programs);
-	const std::string condition_name = "condition";
-
-	auto mutex = shared_memory.construct<boost::interprocess::interprocess_mutex>(mutex_name.c_str())();
-	auto condition = shared_memory.find_or_construct<boost::interprocess::interprocess_condition>(condition_name.c_str())();
-	auto input_somewhere = shared_memory.find<bool>("input_somewhere").first;
-
-	auto messages = shared_memory.find<My_vector>("messages").first;
-
-	for (auto& message : *messages) std::cout << "id: " << message[0]<< "\tmessage: " << message[1] << std::endl;
-
-	while (true)
+	try
 	{
-		mutex->lock();
-		while(!*input_somewhere && !_kbhit());
-		*input_somewhere = true;
-		mutex->unlock();
+		boost::interprocess::managed_shared_memory shared_memory(boost::interprocess::open_only, memory_name.c_str());
 
-		if (*input_somewhere && _kbhit())
+		auto number_of_programs = shared_memory.find<int>("number_of_programs").first;
+		++* number_of_programs;
+
+		const std::string mutex_name = "mutex" + std::to_string(*number_of_programs);
+		const std::string condition_name = "condition";
+
+		auto mutex = shared_memory.construct<boost::interprocess::interprocess_mutex>(mutex_name.c_str())();
+		auto condition = shared_memory.find_or_construct<boost::interprocess::interprocess_condition>(condition_name.c_str())();
+		auto input_somewhere = shared_memory.find<bool>("input_somewhere").first;
+
+		auto messages = shared_memory.find<My_vector>("messages").first;
+
+		for (auto& message : *messages) std::cout << "id: " << message[0] << "\tmessage: " << message[1] << std::endl;
+
+		while (true)
 		{
-			std::string string;
-			char_string message(shared_memory.get_segment_manager());
-			std::getline(std::cin, string);
-			for(char& elem : string) message += elem;
+			mutex->lock();
+			while (!*input_somewhere && !_kbhit());
+			*input_somewhere = true;
+			mutex->unlock();
 
-			char_string id(get_id(message, shared_memory), shared_memory.get_segment_manager());
+			if (*input_somewhere && _kbhit())
+			{
+				std::string string;
+				char_string message(shared_memory.get_segment_manager());
+				std::getline(std::cin, string);
+				for (char& elem : string) message += elem;
 
-			value_type message_with_id({ id, message }, shared_memory.get_segment_manager());
+				char_string id(get_id(message, shared_memory), shared_memory.get_segment_manager());
 
-			std::lock_guard<boost::interprocess::interprocess_mutex> lock(*mutex);
-			messages->push_back(message_with_id);
+				value_type message_with_id({ id, message }, shared_memory.get_segment_manager());
 
-			*input_somewhere = false;
-			condition->notify_all();
+				std::lock_guard<boost::interprocess::interprocess_mutex> lock(*mutex);
+				messages->push_back(message_with_id);
+
+				*input_somewhere = false;
+				condition->notify_all();
+			}
+			else
+			{
+				std::unique_lock<boost::interprocess::interprocess_mutex> lock(*mutex);
+				condition->wait(lock, [&messages, &input_somewhere] {return !messages->empty() && !*input_somewhere; });
+				std::cout << (*messages)[messages->size() - 1][1] << std::endl;
+			}
 		}
-		else
-		{
-			std::unique_lock<boost::interprocess::interprocess_mutex> lock(*mutex);
-			condition->wait(lock, [&messages, &input_somewhere] {return !messages->empty() && !*input_somewhere; });
-			std::cout << (*messages)[messages->size() - 1][1] << std::endl;
-		}
+	}
+	catch(std::exception& ex)
+	{
+		boost::interprocess::shared_memory_object::remove(memory_name.c_str());
+		std::cerr << ex.what() << std::endl;
+		return -1;
 	}
 	return 0;
 }

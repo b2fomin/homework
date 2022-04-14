@@ -54,5 +54,36 @@ int main()
 
 	for (auto& message : *messages) std::cout << message[1] << std::endl;
 
+	while (true)
+	{
+		mutex->lock();
+		while(!*input_somewhere && !_kbhit());
+		*input_somewhere = true;
+		mutex->unlock();
+
+		if (*input_somewhere && _kbhit())
+		{
+			std::lock_guard<boost::interprocess::interprocess_mutex> lock(*mutex);
+			std::string string;
+			char_string message(shared_memory.get_segment_manager());
+			std::getline(std::cin, string);
+			for(char& elem : string) message += elem;
+
+			char_string id(get_id(message, shared_memory), shared_memory.get_segment_manager());
+
+			value_type message_with_id({ id, message }, shared_memory.get_segment_manager());
+
+			messages->push_back(message_with_id);
+
+			*input_somewhere = false;
+			condition->notify_all();
+		}
+		else
+		{
+			std::unique_lock<boost::interprocess::interprocess_mutex> lock(*mutex);
+			condition->wait(lock, [&messages, &input_somewhere] {return !messages->empty() && !*input_somewhere; });
+			std::cout << (*messages)[messages->size() - 1][1];
+		}
+	}
 	return 0;
 }

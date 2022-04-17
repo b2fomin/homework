@@ -14,16 +14,16 @@ int main()
 	using value_allocator = boost::interprocess::allocator<char_string, segment_manager_t>;
 	using value_type = std::vector<char_string, value_allocator>;
 	using allocator = boost::interprocess::allocator<value_type, segment_manager_t>;
-	using My_vector = boost::interprocess::vector<value_type, allocator>;
+	using shared_vector = boost::interprocess::vector<value_type, allocator>;
 
-	const std::size_t memory_size = 1024;
+	constexpr std::size_t memory_size = 1024;
 	const std::string memory_name = "shared_memory";
 
 	boost::interprocess::shared_memory_object::remove(memory_name.c_str());
 	boost::interprocess::managed_shared_memory shared_memory(
 	boost::interprocess::create_only, memory_name.c_str(), memory_size);
 
-	My_vector* messages = shared_memory.construct<My_vector>("messages")
+	shared_vector* messages = shared_memory.construct<shared_vector>("messages")
 		(shared_memory.get_segment_manager());
 
 	int* number_of_programs = shared_memory.construct<int>("number_of_programs")(0);

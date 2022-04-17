@@ -6,7 +6,6 @@
 #include<boost/interprocess/allocators/allocator.hpp>
 #include<boost/interprocess/sync/interprocess_mutex.hpp>
 #include<boost/interprocess/sync/interprocess_condition.hpp>
-#include<boost/functional/hash.hpp>
 
 #include<string>
 #include<iostream>
@@ -19,13 +18,12 @@ using char_string = boost::interprocess::basic_string<char, std::char_traits<cha
 using value_allocator = boost::interprocess::allocator<char_string, segment_manager_t>;
 using value_type = std::vector<char_string, value_allocator>;
 using allocator = boost::interprocess::allocator<value_type, segment_manager_t>;
-using My_vector = boost::interprocess::vector<value_type, allocator>;
+using shared_vector = boost::interprocess::vector<value_type, allocator>;
 
 char_string get_id(char_string string, boost::interprocess::managed_shared_memory& shared_memory)
 {
-	std::size_t seed = 0;
-	boost::hash_combine(seed, string);
-	auto string_seed = std::to_string(seed);
+	static std::size_t prev_id{0};
+	auto string_seed = std::to_string(++prev_id);
 
 	char_string result(shared_memory.get_segment_manager());
 	for (auto& elem : string_seed) result += elem;
@@ -50,19 +48,21 @@ int main()
 		auto condition = shared_memory.find_or_construct<boost::interprocess::interprocess_condition>(condition_name.c_str())();
 		auto input_somewhere = shared_memory.find<bool>("input_somewhere").first;
 
-		auto messages = shared_memory.find<My_vector>("messages").first;
+		auto messages = shared_memory.find<shared_vector>("messages").first;
 
 		for (auto& message : *messages) std::cout << "id: " << message[0] << "\tmessage: " << message[1] << std::endl;
 
 		while (true)
 		{
-			mutex->lock();
-			while (!*input_somewhere && !_kbhit());
-			*input_somewhere = true;
-			mutex->unlock();
-
-			if (*input_somewhere && _kbhit())
 			{
+				std::lock_guard<boost::interprocess::interprocess_mutex> lock(*mutex);
+				while (_kbhit()) _getch();
+				while (!*input_somewhere && !_kbhit());
+			}
+
+			if (!*input_somewhere && _kbhit())
+			{
+				*input_somewhere = true;
 				std::string string;
 				char_string message(shared_memory.get_segment_manager());
 				std::getline(std::cin, string);

@@ -74,7 +74,7 @@ void Server::send_to_client(std::shared_ptr<Connection> client, const Message& m
 	}
 }
 
-void Server::send_to_all_clients(const Message& msg, std::shared_ptr<Connection> client_to_ignore = nullptr)
+void Server::send_to_all_clients(const Message& msg, std::shared_ptr<Connection> client_to_ignore)
 {
 	for (auto& struct_client : clients)
 	{
@@ -95,7 +95,7 @@ void Server::send_to_all_clients(const Message& msg, std::shared_ptr<Connection>
 	}
 }
 
-void Server::Update(bool wait = false)
+void Server::Update(bool wait)
 {
 	if (wait) messages_in.wait();
 	while (!messages_in.empty())

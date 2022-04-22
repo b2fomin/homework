@@ -64,7 +64,7 @@ void Client::send(const Message msg)
 	if (is_connected()) connection->send(msg);
 }
 
-void Client::Update(bool wait = false)
+void Client::Update(bool wait)
 {
 	while (!messages.empty())
 	{

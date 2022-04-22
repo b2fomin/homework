@@ -57,3 +57,53 @@ void Connection::connect_to_client()
 		if (stream.lowest_layer().is_open()) handshake(ssl::stream_base::server);
 	}
 }
+
+void Connection::handshake(ssl::stream_base::handshake_type who)
+{
+	stream.async_handshake(who, [this](err_code ec)
+		{
+			if (ec) fail(ec, "Connection::handshake");
+			else read_message();
+		});
+}
+
+void Connection::read_message()
+{
+	net::async_read_until(stream, streambuf, "}\n", [this](const err_code ec, std::size_t length)
+		{
+			if (ec)
+			{
+				fail(ec, "Connection::read_messages");
+				stream.lowest_layer().close();
+			}
+			else
+			{
+				std::stringstream message; message << std::istream(&streambuf).rdbuf();
+				streambuf.consume(length);
+
+				pt::ptree msg; pt::read_json(message, msg);
+				if (m_owner == owner::client) messages_in.emplace(nullptr, msg);
+				else messages_in.emplace(shared_from_this(), msg);
+				read_message();
+			}
+		});
+}
+
+void Connection::write_message()
+{
+	std::stringstream message; pt::write_json(message, messages_out.front().msg); std::string msg = message.str();
+
+	net::async_write(stream, net::buffer(msg, msg.size()), [this](const err_code ec, std::size_t length)
+		{
+			if (ec)
+			{
+				fail(ec, "Connection::write_message");
+				stream.lowest_layer().close();
+			}
+			else
+			{
+				messages_out.pop();
+				if (!messages_out.empty()) write_message();
+			}
+		});
+}

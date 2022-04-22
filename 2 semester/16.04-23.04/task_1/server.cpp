@@ -18,7 +18,7 @@ std::string Server::get_password()
 	return "j37e!#LLE84HFzVx";
 }
 
-~Server::Server() { stop(); };
+Server::~Server() { stop(); };
 
 bool Server::start()
 {
@@ -58,4 +58,49 @@ void Server::stop()
 {
 	ioc.stop();
 	if (thr_context.joinable()) thr_context.join();
+}
+
+void Server::send_to_client(std::shared_ptr<Connection> client, const Message& msg)
+{
+	if (client && client->is_connected())
+	{
+		client->send(msg);
+	}
+	else
+	{
+		std::cout << client->remote_endpoint() << "has been disconnected" << std::endl;
+		client.reset();
+		clients.erase(client);
+	}
+}
+
+void Server::send_to_all_clients(const Message& msg, std::shared_ptr<Connection> client_to_ignore = nullptr)
+{
+	for (auto& struct_client : clients)
+	{
+		auto client = struct_client.connection;
+		if (client && client->is_connected())
+		{
+			if (client != client_to_ignore)
+			{
+				client->send(msg);
+			}
+		}
+		else
+		{
+			std::cout << client->remote_endpoint() << "has been disconnected" << std::endl;
+			client.reset();
+			clients.erase(client);
+		}
+	}
+}
+
+void Server::Update(bool wait = false)
+{
+	if (wait) messages_in.wait();
+	while (!messages_in.empty())
+	{
+		proceed_received_message(messages_in.front());
+		messages_in.pop();
+	}
 }

@@ -18,3 +18,23 @@ bool Client::verify_certificate(bool preverified,
 
 	return preverified;
 }
+
+void Client::connect(const char* host, std::size_t port)
+{
+	tcp::resolver resolver{ ioc };
+	auto endpoints = resolver.resolve(host, std::to_string(port));
+	auto stream = ssl::stream<tcp::socket>(ioc, ctx);
+
+	if (!SSL_set_tlsext_host_name(stream.native_handle(), host))
+	{
+		boost::system::error_code ec{ static_cast<int>(::ERR_get_error()), boost::asio::error::get_ssl_category() };
+		throw boost::system::system_error{ ec };
+	}
+
+	connection = std::make_unique<Connection>(Connection::owner::client, ioc, ctx,
+		std::move(stream), messages);
+
+	connection->connect_to_server(endpoints);
+
+	thr_context = std::thread{ [this] {ioc.run(); } };
+}

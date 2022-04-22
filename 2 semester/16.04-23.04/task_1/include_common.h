@@ -26,10 +26,7 @@ namespace ssl = net::ssl;
 using err_code = boost::system::error_code;
 namespace pt = boost::property_tree;
 
-void fail(const err_code ec, const char* what)
-{
-	std::cout << what << ": " << ec.message() << std::endl;
-}
+void fail(const err_code, const char*);
 
 enum class ServerCommand
 {

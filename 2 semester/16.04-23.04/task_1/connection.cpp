@@ -1,3 +1,4 @@
+#pragma once
 #include"connection.h"
 
 Connection::Connection(owner m_owner, net::io_context& ioc, ssl::context& ctx, ssl::stream<tcp::socket>&& stream, tsqueue<Message>& messages_in)
@@ -60,11 +61,10 @@ void Connection::connect_to_client()
 
 void Connection::handshake(ssl::stream_base::handshake_type who)
 {
-	stream.async_handshake(who, [this](err_code ec)
-		{
-			if (ec) fail(ec, "Connection::handshake");
-			else read_message();
-		});
+	err_code ec;
+	stream.handshake(who, ec);		
+	if (ec) fail(ec, "Connection::handshake");
+	else read_message();		
 }
 
 void Connection::read_message()
@@ -93,7 +93,7 @@ void Connection::write_message()
 {
 	std::stringstream message; pt::write_json(message, messages_out.front().msg); std::string msg = message.str();
 
-	net::async_write(stream, net::buffer(msg, msg.size()), [this](const err_code ec, std::size_t length)
+	net::async_write(stream, net::buffer(msg.data(), msg.size()), [this](const err_code ec, std::size_t length)
 		{
 			if (ec)
 			{

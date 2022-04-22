@@ -30,37 +30,11 @@ public:
 
 	void disconnect();
 
-	void send(const Message msg)
-	{
-		net::post(ioc, [this, msg]
-			{
-				bool queue_is_empty = messages_out.empty();
+	void send(const Message msg);
 
-				messages_out.push(msg);
+	void connect_to_server(tcp::resolver::results_type& endpoints);
 
-				if (queue_is_empty) //because another messages are processing
-					write_message();
-			});
-	}
-
-	void connect_to_server(tcp::resolver::results_type& endpoints)
-	{
-		if (m_owner == owner::client)
-		{			net::async_connect(stream.lowest_layer(), endpoints, [this](const err_code ec, tcp::endpoint)
-				{
-					if (ec) fail(ec, "Connection::connect_to_server");
-					else handshake(ssl::stream_base::client);
-				});
-		}
-	}
-
-	void connect_to_client()
-	{
-		if (m_owner == owner::server)
-		{
-			if (stream.lowest_layer().is_open()) handshake(ssl::stream_base::server);
-		}
-	}
+	void connect_to_client();
 
 private:
 	void handshake(ssl::stream_base::handshake_type);

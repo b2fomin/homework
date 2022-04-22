@@ -64,18 +64,42 @@ void Client::send(const Message msg)
 	if (is_connected()) connection->send(msg);
 }
 
-template<typename... Args>
-void send(ClientCommand cmd, Args... args)
-{
-	Message msg = create_msg_to_send(cmd, args...);
-	send(msg);
-}
-
-void Update(bool wait = false)
+void Client::Update(bool wait = false)
 {
 	while (!messages.empty())
 	{
 		proceed_received_message(messages.front());
 		messages.pop();
 	}
+}
+
+Message create_msg_to_send(std::string string)
+{
+	std::stringstream ss{ string };
+	std::string word;
+	std::string command;
+	std::getline(ss, word, ' ');
+	for (int i = 0; i < delimeter.size(); ++i)
+	{
+		if (word[i] != delimeter[i])
+		{
+			return create_msg_to_send(ClientCommand::Message, string);
+		}
+	}
+	word.erase(word.begin(), word.begin() + delimeter.size());
+	ClientCommand cmd = convert_string_to_client_command(word);
+	std::vector<std::string> args;
+	while (std::getline(ss, word, ' '))
+	{
+		args.push_back(word);
+	}
+	return create_msg_to_send(cmd, args);
+}
+
+ClientCommand convert_string_to_client_command(std::string string)
+{
+	if (string == "login") return ClientCommand::LogIn;
+	if (string == "register") return ClientCommand::Register;
+	if (string == "chat") return ClientCommand::Chat;
+	throw std::exception("Invalid command");
 }

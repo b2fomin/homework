@@ -14,9 +14,12 @@ OpenSSL\bin\VC
 которые должны начинаться с переменной delimeter из
 include_common.h:
 login [login] [password] для авторизации
+
 register [login] [password] [nickname] для регистрации
+
 chat begin nickname [nickname] начало чата с
 пользователем, который онлайн, с ником nickname. В случае,
 если онлайн несколько пользователей с таким ником необходимо использовать
 команду chat begin id [id]
+
 chat end для завершения чата

@@ -53,3 +53,29 @@ void Client::disconnect()
 	if (thr_context.joinable()) thr_context.join();
 	connection.release();
 }
+
+Client::~Client()
+{
+	disconnect();
+}
+
+void Client::send(const Message msg)
+{
+	if (is_connected()) connection->send(msg);
+}
+
+template<typename... Args>
+void send(ClientCommand cmd, Args... args)
+{
+	Message msg = create_msg_to_send(cmd, args...);
+	send(msg);
+}
+
+void Update(bool wait = false)
+{
+	while (!messages.empty())
+	{
+		proceed_received_message(messages.front());
+		messages.pop();
+	}
+}

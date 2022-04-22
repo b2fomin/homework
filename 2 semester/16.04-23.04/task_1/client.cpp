@@ -38,3 +38,18 @@ void Client::connect(const char* host, std::size_t port)
 
 	thr_context = std::thread{ [this] {ioc.run(); } };
 }
+
+bool Client::is_connected()
+{
+	if (connection) return connection->is_connected();
+	else return false;
+}
+
+void Client::disconnect()
+{
+	if (is_connected()) connection->disconnect();
+
+	ioc.stop();
+	if (thr_context.joinable()) thr_context.join();
+	connection.release();
+}

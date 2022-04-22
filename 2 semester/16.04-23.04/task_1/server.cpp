@@ -105,7 +105,7 @@ void Server::Update(bool wait = false)
 	}
 }
 
-void proceed_received_message(const Message msg)
+void Server::proceed_received_message(const Message msg)
 {
 	auto json_msg = msg.msg;
 	auto cmd = static_cast<ClientCommand>(std::stoi(json_msg.get<std::string>("command")));

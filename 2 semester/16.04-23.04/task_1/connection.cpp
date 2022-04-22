@@ -24,3 +24,36 @@ void Connection::disconnect()
 		net::post(ioc, [this] {stream.lowest_layer().close(); });
 	}
 }
+
+void Connection::send(const Message msg)
+{
+	net::post(ioc, [this, msg]
+		{
+			bool queue_is_empty = messages_out.empty();
+
+			messages_out.push(msg);
+
+			if (queue_is_empty) //because another messages are processing
+				write_message();
+		});
+}
+
+void Connection::connect_to_server(tcp::resolver::results_type& endpoints)
+{
+	if (m_owner == owner::client)
+	{
+		net::async_connect(stream.lowest_layer(), endpoints, [this](const err_code ec, tcp::endpoint)
+			{
+				if (ec) fail(ec, "Connection::connect_to_server");
+				else handshake(ssl::stream_base::client);
+			});
+	}
+}
+
+void Connection::connect_to_client()
+{
+	if (m_owner == owner::server)
+	{
+		if (stream.lowest_layer().is_open()) handshake(ssl::stream_base::server);
+	}
+}

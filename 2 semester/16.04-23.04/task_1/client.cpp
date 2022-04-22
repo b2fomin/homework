@@ -73,7 +73,7 @@ void Client::Update(bool wait = false)
 	}
 }
 
-Message create_msg_to_send(std::string string)
+Message Client::create_msg_to_send(std::string string)
 {
 	std::stringstream ss{ string };
 	std::string word;
@@ -96,10 +96,35 @@ Message create_msg_to_send(std::string string)
 	return create_msg_to_send(cmd, args);
 }
 
-ClientCommand convert_string_to_client_command(std::string string)
+ClientCommand Client::convert_string_to_client_command(std::string string)
 {
 	if (string == "login") return ClientCommand::LogIn;
 	if (string == "register") return ClientCommand::Register;
 	if (string == "chat") return ClientCommand::Chat;
 	throw std::exception("Invalid command");
+}
+
+void Client::proceed_received_message(const Message msg)
+{
+	auto json_msg = msg.msg;
+	auto cmd = static_cast<ServerCommand>(std::stoi(json_msg.get<std::string>("command")));
+	switch (cmd)
+	{
+	case ServerCommand::Message:
+	{
+		std::cout << json_msg.get<std::string>("argument1") << std::endl;
+	}
+	case ServerCommand::NoMessage:
+	{
+		using namespace std::chrono_literals;
+
+		if (cin_thread.wait_for(0ms) == std::future_status::ready)
+		{
+			cin_thread.get();
+			cin_thread = std::async([this]() {std::getline(std::cin, message);
+			send(create_msg_to_send(std::move(message))); });
+		}
+	}
+	return;
+	}
 }

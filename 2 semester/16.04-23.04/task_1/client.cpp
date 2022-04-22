@@ -9,3 +9,12 @@ Client::Client(std::filesystem::path path)
 	ctx.load_verify_file((path / "rootca.crt").string());
 }
 
+bool Client::verify_certificate(bool preverified,
+	boost::asio::ssl::verify_context& ctx)
+{
+	char subject_name[256];
+	X509* cert = X509_STORE_CTX_get_current_cert(ctx.native_handle());
+	X509_NAME_oneline(X509_get_subject_name(cert), subject_name, 256);
+
+	return preverified;
+}

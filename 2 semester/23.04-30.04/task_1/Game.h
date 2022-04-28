@@ -2,8 +2,9 @@
 #include"Asteroid.h"
 #include"Bullet.h"
 #include"Player.h"
-#include<iostream>
+#include<string>
 #include<map>
+#include<Windows.h>// for message box
 
 class Game
 {
@@ -68,7 +69,7 @@ public:
 		m_entities.push_back(m_player);
 	}
 private:
-	void check_collisions()
+	void create_collisions_map()
 	{
 		int rocks_count{ 0 };
 		for (auto& entity1: m_entities)
@@ -109,6 +110,22 @@ private:
 			else i++;
 		}
 	}
+
+	void check_keyboard(sf::Event& _event)
+	{
+		if (_event.type == sf::Event::KeyPressed &&
+			_event.key.code == sf::Keyboard::Space)
+		{
+			m_entities.push_back(std::make_shared<Bullet>(m_animations.find(AnimationType::Bullet)->second,
+				m_player->get_x(), m_player->get_y(), 0.f, 0.f, m_player->get_angle(), 10));
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) m_player->set_angle(m_player->get_angle() + 3);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))  m_player->set_angle(m_player->get_angle() - 3);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) m_player->set_thrust(true);
+		else m_player->set_thrust(false);
+	}
+
 public:
 	void Run()
 	{
@@ -122,19 +139,9 @@ public:
 				break;
 			}
 
-			if (_event.type == sf::Event::KeyPressed &&
-				_event.key.code == sf::Keyboard::Space)
-			{
-				m_entities.push_back(std::make_shared<Bullet>(m_animations.find(AnimationType::Bullet)->second,
-					m_player->get_x(), m_player->get_y(), 0.f, 0.f, m_player->get_angle(), 10));
-			}
+			check_keyboard(_event);
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) m_player->set_angle(m_player->get_angle() + 3);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))  m_player->set_angle(m_player->get_angle() - 3);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) m_player->set_thrust(true);
-			else m_player->set_thrust(false);
-
-			check_collisions();
+			create_collisions_map();
 			for (auto& collision : m_collisions)
 			{
 				if (collision.first->get_type() == EntityType::Asteroid)
@@ -156,9 +163,13 @@ public:
 							m_animations.find(AnimationType::Explosion_ship)->second, 1, collision.first->get_x(), collision.first->get_y()));
 
 						auto player_HP = m_player->get_HP();
+						auto player_score = m_player->get_score();
+						auto player_thrust = m_player->get_thrust();
 						m_entities.erase(std::remove(m_entities.begin(), m_entities.end(), m_player), m_entities.end());
 						m_player.reset();
 						m_player = std::make_shared<Player>(m_animations.find(AnimationType::Player)->second, player_HP, W / 2, H / 2, 0, 0, 0, 20);
+						m_player->set_score(player_score);
+						m_player->set_thrust(player_thrust);
 						m_entities.push_back(m_player);
 						clock.restart();
 					}
@@ -206,7 +217,15 @@ public:
 			for (auto& i : m_entities) i->draw(m_app);
 			m_app.display();
 		}
+
+		const std::wstring string = L"You've scored " +
+			std::to_wstring(m_player->get_score()) + L" points";
+
+		int msg = MessageBox(nullptr, string.data(), L"Account Details", MB_OK);
+
 	}
+	
+
 };
 
 const sf::Time Game::immortality_time = sf::seconds(3);

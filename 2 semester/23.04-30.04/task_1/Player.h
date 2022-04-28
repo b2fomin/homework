@@ -15,6 +15,7 @@ public:
 	{}
 
 	std::size_t get_score() const noexcept { return m_score; };
+	void set_score(std::size_t score) noexcept { m_score = score; };
 
 	bool get_thrust() const noexcept { return m_thrust; };
 	void set_thrust(bool thrust) noexcept { m_thrust = thrust; };

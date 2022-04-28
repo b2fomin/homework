@@ -1,0 +1,212 @@
+#pragma once
+#include"Asteroid.h"
+#include"Bullet.h"
+#include"Player.h"
+#include<iostream>
+#include<map>
+
+class Game
+{
+private:
+	constexpr static int textures_number = 7;
+	constexpr static float rock_radius = 25;
+	constexpr static float small_rock_radius = 15;
+	constexpr static int max_rocks = 10;
+	const static sf::Time immortality_time;
+private:
+	sf::RenderWindow m_app;
+	std::vector<sf::Texture> m_textures;
+	sf::Sprite m_background;
+	std::map<AnimationType, Animation> m_animations;
+	std::map<std::shared_ptr<Entity>, std::shared_ptr<Entity>> m_collisions;
+	std::vector<std::shared_ptr<Entity>> m_entities;
+	std::shared_ptr<Player> m_player;
+	sf::Text score_and_HP;
+	sf::Font font;
+public:
+	Game(const std::size_t width, const std::size_t height, const char* name)
+		: m_app{ sf::VideoMode(width, height), name }
+	{
+		m_app.setFramerateLimit(60);
+
+		if (!font.loadFromFile("task_1/font/DihjautiS-Regular.otf"))
+		{
+			throw std::exception("Can't load file");
+		}
+
+		score_and_HP.setFont(font);
+		score_and_HP.setFillColor(sf::Color::Red);
+
+		m_textures.resize(textures_number);
+		m_textures[0].loadFromFile("task_1/images/spaceship.png");
+		m_textures[1].loadFromFile("task_1/images/background.jpg");
+		m_textures[2].loadFromFile("task_1/images/explosions/type_C.png");
+		m_textures[3].loadFromFile("task_1/images/rock.png");
+		m_textures[4].loadFromFile("task_1/images/fire_blue.png");
+		m_textures[5].loadFromFile("task_1/images/rock_small.png");
+		m_textures[6].loadFromFile("task_1/images/explosions/type_B.png");
+
+		m_textures[0].setSmooth(true);
+		m_textures[1].setSmooth(true);
+		m_background.setTexture(m_textures[1]);
+
+		m_animations.emplace(AnimationType::Explosion, Animation(m_textures[2], 0, 0, 256, 256, 48, 0.5));
+		m_animations.emplace(AnimationType::Rock, Animation(m_textures[3], 0, 0, 64, 64, 16, 0.2));
+		m_animations.emplace(AnimationType::Rock_small, Animation(m_textures[5], 0, 0, 64, 64, 16, 0.2));
+		m_animations.emplace(AnimationType::Bullet, Animation(m_textures[4], 0, 0, 32, 64, 16, 0.8));
+		m_animations.emplace(AnimationType::Player, Animation(m_textures[0], 40, 0, 40, 40, 1, 0));
+		m_animations.emplace(AnimationType::Player_go, Animation(m_textures[0], 40, 40, 40, 40, 1, 0));
+		m_animations.emplace(AnimationType::Explosion_ship, Animation(m_textures[6], 0, 0, 192, 192, 64, 0.5));
+
+		for (int i = 0; i < 15; i++)
+		{
+			m_entities.push_back(std::make_shared<Asteroid>(m_animations.find(AnimationType::Rock)->second, static_cast<float>(rand() % W),
+				static_cast<float>(rand() % H), static_cast<float>(rand() % 360), rock_radius));
+		}
+
+		m_player = std::make_shared<Player>(m_animations.find(AnimationType::Player)->second, 3, 200, 200, 0, 0, 0, 20);
+		m_entities.push_back(m_player);
+	}
+private:
+	void check_collisions()
+	{
+		int rocks_count{ 0 };
+		for (auto& entity1: m_entities)
+		{
+			if (entity1->get_type() == EntityType::Asteroid) ++rocks_count;
+			if (rocks_count > max_rocks)
+ 			{
+				entity1->set_HP(0);
+				--rocks_count;
+			}
+			else
+			{
+				for (auto& entity2 : m_entities)
+				{
+					if (entity1 != entity2 && Entity::isCollide(entity1, entity2))
+					{
+						if (m_collisions.find(entity1) != m_collisions.end()
+							|| m_collisions.find(entity2) != m_collisions.end())
+							continue;
+						if (entity1->get_type() == EntityType::Asteroid)
+							m_collisions[entity1] = entity2;
+						else m_collisions[entity2] = entity1;
+					}
+				}
+			}
+		}
+	}
+
+	void delete_dead_entities()
+	{
+		for (auto i = m_entities.begin(); i != m_entities.end();)
+		{
+			auto entity = *i;
+			entity->update();
+			entity->get_anim().update();
+
+			if (entity->get_HP() == 0) { entity.reset(); i = m_entities.erase(i); }
+			else i++;
+		}
+	}
+public:
+	void Run()
+	{
+		sf::Event _event;
+		sf::Clock clock;
+		while (m_app.pollEvent(_event) || m_player->is_alive())
+		{
+			if (_event.type == sf::Event::Closed)
+			{
+				m_app.close();
+				break;
+			}
+
+			if (_event.type == sf::Event::KeyPressed &&
+				_event.key.code == sf::Keyboard::Space)
+			{
+				m_entities.push_back(std::make_shared<Bullet>(m_animations.find(AnimationType::Bullet)->second,
+					m_player->get_x(), m_player->get_y(), 0.f, 0.f, m_player->get_angle(), 10));
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) m_player->set_angle(m_player->get_angle() + 3);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))  m_player->set_angle(m_player->get_angle() - 3);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) m_player->set_thrust(true);
+			else m_player->set_thrust(false);
+
+			check_collisions();
+			for (auto& collision : m_collisions)
+			{
+				if (collision.first->get_type() == EntityType::Asteroid)
+				{
+					bool is_immortal;
+					if (clock.getElapsedTime() >= immortality_time) is_immortal = false;
+					else is_immortal = true;
+
+					if (collision.second->get_type() == EntityType::Bullet)
+					{
+						collision.second->set_HP(collision.second->get_HP() - 1);
+						m_player->score_increase();
+					}
+
+					if (!is_immortal && collision.second->get_type() == EntityType::Player)
+					{
+						collision.second->set_HP(collision.second->get_HP() - 1);
+						m_entities.push_back(std::make_shared<Entity>(EntityType::Explosion,
+							m_animations.find(AnimationType::Explosion_ship)->second, 1, collision.first->get_x(), collision.first->get_y()));
+
+						auto player_HP = m_player->get_HP();
+						m_entities.erase(std::remove(m_entities.begin(), m_entities.end(), m_player), m_entities.end());
+						m_player.reset();
+						m_player = std::make_shared<Player>(m_animations.find(AnimationType::Player)->second, player_HP, W / 2, H / 2, 0, 0, 0, 20);
+						m_entities.push_back(m_player);
+						clock.restart();
+					}
+
+					if (!is_immortal)
+					{
+						collision.first->set_HP(0);
+
+						m_entities.push_back(std::make_shared<Entity>(EntityType::Explosion,
+							m_animations.find(AnimationType::Explosion)->second, 1, collision.first->get_x(), collision.first->get_y()));
+
+
+						for (int i = 0; i < 2; i++)
+						{
+							if (collision.first->get_r() == 15) continue;
+							m_entities.push_back(std::make_shared<Asteroid>(m_animations.find(AnimationType::Rock_small)->second,
+								collision.first->get_x(), collision.first->get_y(), static_cast<float>(rand() % 360), small_rock_radius));
+						}
+					}
+				}
+
+			}
+
+			m_collisions.clear();
+
+			if (m_player->get_thrust())  m_player->set_anim(m_animations.find(AnimationType::Player_go)->second);
+			else   m_player->set_anim(m_animations.find(AnimationType::Player)->second);
+
+			for (auto& e : m_entities)
+				if (e->get_type() == EntityType::Explosion)
+					if (e->get_anim().isEnd()) e->set_HP(0);
+
+			if (rand() % 150 == 0)
+			{
+				m_entities.push_back(std::make_shared<Asteroid>(m_animations.find(AnimationType::Rock)->second, 0,
+					static_cast<float>(rand() % H), static_cast<float>(rand() % 360), rock_radius));
+			}
+
+			delete_dead_entities();
+
+			score_and_HP.setString("score: " + std::to_string(m_player->get_score()) +
+				"\nLifes: " + std::to_string(m_player->get_HP()));
+			m_app.draw(m_background);
+			m_app.draw(score_and_HP);
+			for (auto& i : m_entities) i->draw(m_app);
+			m_app.display();
+		}
+	}
+};
+
+const sf::Time Game::immortality_time = sf::seconds(3);

@@ -7,7 +7,7 @@ private:
 	constexpr static int max_speed = 6;
 public:
 	Bullet(Animation& a, float x = 0.f, float y = 0, float dx = 0.f, float dy = 0.f, float angle = 0.f, float radius = 1.f)
-		: Entity(EntityType::Bullet, a, 1, x, y, dx, dy, angle)
+		: Entity(EntityType::Bullet, a, 1, x, y, dx, dy, angle, radius)
 	{}
 private:
 	void virtual update() override

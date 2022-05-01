@@ -36,12 +36,6 @@ public:
 		m_anim.sprite().setPosition(m_x, m_y);
 		m_anim.sprite().setRotation(m_angle + 90);
 		app.draw(m_anim.sprite());
-
-		sf::CircleShape entity(m_r);
-		entity.setFillColor(sf::Color(255, 0, 0, 170));
-		entity.setPosition(m_x, m_y);
-		entity.setOrigin(m_r, m_r);
-		app.draw(entity);
 	}
 
 	virtual ~Entity() = default;

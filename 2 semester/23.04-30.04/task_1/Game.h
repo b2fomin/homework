@@ -74,7 +74,8 @@ private:
 		int rocks_count{ 0 };
 		for (auto& entity1: m_entities)
 		{
-			if (entity1->get_type() == EntityType::Asteroid) ++rocks_count;
+			if (entity1->get_type() != EntityType::Asteroid) continue;
+			else ++rocks_count;
 			if (rocks_count > max_rocks)
  			{
 				entity1->set_HP(0);
@@ -86,12 +87,7 @@ private:
 				{
 					if (entity1 != entity2 && Entity::isCollide(entity1, entity2))
 					{
-						if (m_collisions.find(entity1) != m_collisions.end()
-							|| m_collisions.find(entity2) != m_collisions.end())
-							continue;
-						if (entity1->get_type() == EntityType::Asteroid)
-							m_collisions[entity1] = entity2;
-						else m_collisions[entity2] = entity1;
+						m_collisions[entity1] = entity2;
 					}
 				}
 			}
@@ -174,7 +170,7 @@ public:
 						clock.restart();
 					}
 
-					if (!is_immortal)
+					if (!is_immortal || collision.second->get_type()==EntityType::Bullet)
 					{
 						collision.first->set_HP(0);
 

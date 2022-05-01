@@ -2,7 +2,7 @@
 #include"Animation.h"
 #include"include_common.h"
 
-class Entity:public std::enable_shared_from_this<Entity>
+class Entity
 {
 public:
 protected:

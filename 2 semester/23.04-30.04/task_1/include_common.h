@@ -4,9 +4,6 @@
 #include<vector>
 #include<memory>
 
-const auto W = sf::VideoMode::getDesktopMode().width;
-const auto H = sf::VideoMode::getDesktopMode().height;
-
 constexpr float Dectorad = 0.017453f;
 
 enum class EntityType

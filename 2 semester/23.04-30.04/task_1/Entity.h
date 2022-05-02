@@ -11,13 +11,13 @@ protected:
 	int m_HP;
 	EntityType m_type;
 public:
-	Entity(EntityType type, Animation& a, int HP = 1, float x = 0.f, float y = 0.f,
-		float dx = 0.f, float dy = 0.f, float Angle = 0.0f, float radius = 1.f)
+	Entity(EntityType type, Animation& a, int HP, float x, float y,
+		float dx, float dy, float Angle, float radius)
 		: m_type{ type }, m_HP{HP}, m_anim{ a }, m_x{ x }, m_y{ y }, m_dx{ dx }, m_dy{ dy }, m_angle{ Angle }, m_r{ radius }
 	{}
 
 	// можно применить идиому NVI, или шаблонный метод для гибкости
-	virtual void update() {}; // = default
+	virtual void update(std::size_t win_width, std::size_t win_height) {}; // = default
 
 	EntityType virtual get_type() const noexcept { return m_type; };
 	virtual const std::size_t& get_HP() const noexcept { return m_HP; };

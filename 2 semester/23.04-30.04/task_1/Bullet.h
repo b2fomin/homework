@@ -6,11 +6,11 @@ class Bullet : public Entity
 private:
 	constexpr static int max_speed = 6;
 public:
-	Bullet(Animation& a, float x = 0.f, float y = 0, float dx = 0.f, float dy = 0.f, float angle = 0.f, float radius = 1.f)
+	Bullet(Animation& a, float x, float y, float dx, float dy, float angle, float radius)
 		: Entity(EntityType::Bullet, a, 1, x, y, dx, dy, angle, radius)
 	{}
 private:
-	void virtual update() override
+	void virtual update(std::size_t win_width, std::size_t win_height) override
 	{
 		m_dx = std::cos(m_angle * Dectorad) * max_speed;
 		m_dy = std::sin(m_angle * Dectorad) * max_speed;
@@ -18,7 +18,7 @@ private:
 		m_x += m_dx;
 		m_y += m_dy;
 
-		if (m_x > W || m_x<0 || m_y>H || m_y < 0) m_HP = 0;
+		if (m_x > win_width || m_x < 0 || m_y > win_height || m_y < 0) m_HP = 0;
 	}
 
 };

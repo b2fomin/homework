@@ -10,7 +10,7 @@ private:
 	bool m_thrust;
 	int m_score;
 public:
-	Player(Animation& a, int HP, float x = 0.f, float y = 0.f, float dx = 0.f, float dy = 0.f, float angle = 0.f, float radius = 1.f)
+	Player(Animation& a, int HP, float x, float y, float dx, float dy, float angle, float radius)
 		: Entity(EntityType::Player, a, HP, x, y, dx, dy, angle, radius), m_score{ 0 }, m_thrust{ false }
 	{}
 
@@ -26,7 +26,7 @@ public:
 
 
 private:
-	void virtual update() override
+	void virtual update(std::size_t win_width, std::size_t win_height) override
 	{
 		if (m_thrust)
 		{
@@ -49,8 +49,8 @@ private:
 		m_x += m_dx;
 		m_y += m_dy;
 
-		if (m_x > W) m_x = 0; if (m_x < 0) m_x = W;
-		if (m_y > H) m_y = 0; if (m_y < 0) m_y = H;
+		if (m_x > win_width) m_x = 0; if (m_x < 0) m_x = win_width;
+		if (m_y > win_height) m_y = 0; if (m_y < 0) m_y = win_height;
 	}
 
 };

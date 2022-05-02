@@ -59,10 +59,11 @@ public:
 		m_animations.emplace(AnimationType::Player_go, Animation(m_textures[0], 40, 40, 40, 40, 1, 0));
 		m_animations.emplace(AnimationType::Explosion_ship, Animation(m_textures[6], 0, 0, 192, 192, 64, 0.5));
 
+		auto size = m_app.getSize();
 		for (int i = 0; i < 15; i++)
 		{
-			m_entities.push_back(std::make_shared<Asteroid>(m_animations.find(AnimationType::Rock)->second, static_cast<float>(rand() % W),
-				static_cast<float>(rand() % H), static_cast<float>(rand() % 360), rock_radius));
+			m_entities.push_back(std::make_shared<Asteroid>(m_animations.find(AnimationType::Rock)->second, size.x,
+				size.y, rock_radius));
 		}
 
 		m_player = std::make_shared<Player>(m_animations.find(AnimationType::Player)->second, 3, 200, 200, 0, 0, 0, 20);
@@ -94,12 +95,13 @@ private:
 		}
 	}
 
-	void delete_dead_entities()
+	void update_entities_and_delete_dead_ones()
 	{
 		for (auto i = m_entities.begin(); i != m_entities.end();)
 		{
 			auto entity = *i;
-			entity->update();
+			auto size = m_app.getSize();
+			entity->update(size.x, size.y);
 			entity->get_anim().update();
 
 			if (entity->get_HP() == 0) { entity.reset(); i = m_entities.erase(i); }
@@ -127,8 +129,9 @@ public:
 	{
 		sf::Event _event;
 		sf::Clock clock;
-		while (m_app.pollEvent(_event) || m_player->is_alive())
+		while (m_player->is_alive())
 		{
+			m_app.pollEvent(_event);
 			if (_event.type == sf::Event::Closed)
 			{
 				m_app.close();
@@ -156,14 +159,15 @@ public:
 					{
 						collision.second->set_HP(collision.second->get_HP() - 1);
 						m_entities.push_back(std::make_shared<Entity>(EntityType::Explosion,
-							m_animations.find(AnimationType::Explosion_ship)->second, 1, collision.first->get_x(), collision.first->get_y()));
+							m_animations.find(AnimationType::Explosion_ship)->second, 1, collision.first->get_x(), collision.first->get_y(), 0, 0, 0, 1));
 
 						auto player_HP = m_player->get_HP();
 						auto player_score = m_player->get_score();
 						auto player_thrust = m_player->get_thrust();
-						m_entities.erase(std::remove(m_entities.begin(), m_entities.end(), m_player), m_entities.end());
+						auto size = m_app.getSize();
+						m_entities.erase(std::find(m_entities.begin(), m_entities.end(), m_player));
 						m_player.reset();
-						m_player = std::make_shared<Player>(m_animations.find(AnimationType::Player)->second, player_HP, W / 2, H / 2, 0, 0, 0, 20);
+						m_player = std::make_shared<Player>(m_animations.find(AnimationType::Player)->second, player_HP, size.x / 2, size.y / 2, 0, 0, 0, 20);
 						m_player->set_score(player_score);
 						m_player->set_thrust(player_thrust);
 						m_entities.push_back(m_player);
@@ -175,14 +179,19 @@ public:
 						collision.first->set_HP(0);
 
 						m_entities.push_back(std::make_shared<Entity>(EntityType::Explosion,
-							m_animations.find(AnimationType::Explosion)->second, 1, collision.first->get_x(), collision.first->get_y()));
+							m_animations.find(AnimationType::Explosion)->second, 1, collision.first->get_x(), collision.first->get_y(), 0, 0, 0, 20));
 
 
 						for (int i = 0; i < 2; i++)
 						{
-							if (collision.first->get_r() == 15) continue;
+							if (collision.first->get_r() == small_rock_radius) continue;
+							
+							std::random_device rd;
+							std::default_random_engine gen{ rd() };
+							std::uniform_int_distribution<int> angle_dist(0, 360);
+
 							m_entities.push_back(std::make_shared<Asteroid>(m_animations.find(AnimationType::Rock_small)->second,
-								collision.first->get_x(), collision.first->get_y(), static_cast<float>(rand() % 360), small_rock_radius));
+								collision.first->get_x(), collision.first->get_y(), angle_dist(gen), small_rock_radius));
 						}
 					}
 				}
@@ -198,13 +207,16 @@ public:
 				if (e->get_type() == EntityType::Explosion)
 					if (e->get_anim().isEnd()) e->set_HP(0);
 
+
 			if (rand() % 150 == 0)
 			{
-				m_entities.push_back(std::make_shared<Asteroid>(m_animations.find(AnimationType::Rock)->second, 0,
-					static_cast<float>(rand() % H), static_cast<float>(rand() % 360), rock_radius));
+				auto size = m_app.getSize();
+
+				m_entities.push_back(std::make_shared<Asteroid>(m_animations.find(AnimationType::Rock)->second, size.x,
+					size.y, rock_radius));
 			}
 
-			delete_dead_entities();
+			update_entities_and_delete_dead_ones();
 
 			score_and_HP.setString("score: " + std::to_string(m_player->get_score()) +
 				"\nLifes: " + std::to_string(m_player->get_HP()));

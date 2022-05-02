@@ -12,14 +12,12 @@ public:
         std::random_device rd;
         std::default_random_engine gen{rd()};
         std::uniform_int_distribution<int> x_dist(0, win_width);
-        std::uniform_int_distribution<int> y_dist(0, win_height);
         std::uniform_int_distribution<int> angle_dist(0, 360);
         std::uniform_int_distribution<int> speed_dist
         (-max_speed, max_speed);
         m_dx = speed_dist(gen);
         m_dy = speed_dist(gen);
         m_x = x_dist(gen);
-        m_y = y_dist(gen);
         m_angle = angle_dist(gen);
     }
 

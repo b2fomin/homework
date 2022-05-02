@@ -12,7 +12,7 @@ private:
 	constexpr static int textures_number = 7;
 	constexpr static float rock_radius = 25;
 	constexpr static float small_rock_radius = 15;
-	constexpr static int max_rocks = 10;
+	constexpr static int max_rocks = 30;
 	const static sf::Time immortality_time;
 private:
 	sf::RenderWindow m_app;
@@ -73,23 +73,14 @@ private:
 	void create_collisions_map()
 	{
 		int rocks_count{ 0 };
-		for (auto& entity1: m_entities)
+		for (auto& entity1 : m_entities)
 		{
 			if (entity1->get_type() != EntityType::Asteroid) continue;
-			else ++rocks_count;
-			if (rocks_count > max_rocks)
- 			{
-				entity1->set_HP(0);
-				--rocks_count;
-			}
-			else
+			for (auto& entity2 : m_entities)
 			{
-				for (auto& entity2 : m_entities)
+				if (entity1 != entity2 && Entity::isCollide(entity1, entity2))
 				{
-					if (entity1 != entity2 && Entity::isCollide(entity1, entity2))
-					{
 						m_collisions[entity1] = entity2;
-					}
 				}
 			}
 		}
@@ -141,6 +132,8 @@ public:
 			check_keyboard(_event);
 
 			create_collisions_map();
+			auto rock_count = std::count_if(m_entities.begin(), m_entities.end(),
+				[](auto& elem) {return elem->get_type() == EntityType::Asteroid; });
 			for (auto& collision : m_collisions)
 			{
 				if (collision.first->get_type() == EntityType::Asteroid)
@@ -174,8 +167,9 @@ public:
 						clock.restart();
 					}
 
-					if (!is_immortal || collision.second->get_type()==EntityType::Bullet)
+					if (!is_immortal || collision.second->get_type() == EntityType::Bullet)
 					{
+						--rock_count;
 						collision.first->set_HP(0);
 
 						m_entities.push_back(std::make_shared<Entity>(EntityType::Explosion,
@@ -185,7 +179,7 @@ public:
 						for (int i = 0; i < 2; i++)
 						{
 							if (collision.first->get_r() == small_rock_radius) continue;
-							
+
 							std::random_device rd;
 							std::default_random_engine gen{ rd() };
 							std::uniform_int_distribution<int> angle_dist(0, 360);
@@ -208,7 +202,7 @@ public:
 					if (e->get_anim().isEnd()) e->set_HP(0);
 
 
-			if (rand() % 150 == 0)
+			if (rock_count < max_rocks && rand() % 150 == 0)
 			{
 				auto size = m_app.getSize();
 
@@ -232,7 +226,7 @@ public:
 		int msg = MessageBox(nullptr, string.data(), L"Account Details", MB_OK);
 
 	}
-	
+
 
 };
 

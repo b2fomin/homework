@@ -12,7 +12,7 @@ private:
 	constexpr static int textures_number = 7;
 	constexpr static float rock_radius = 25;
 	constexpr static float small_rock_radius = 15;
-	constexpr static int max_rocks = 30;
+	constexpr static int max_rocks = 10;
 	const static sf::Time immortality_time;
 private:
 	sf::RenderWindow m_app;
@@ -202,12 +202,12 @@ public:
 					if (e->get_anim().isEnd()) e->set_HP(0);
 
 
-			if (rock_count < max_rocks && rand() % 150 == 0)
+			auto size = m_app.getSize();
+			while (rock_count < max_rocks)
 			{
-				auto size = m_app.getSize();
-
 				m_entities.push_back(std::make_shared<Asteroid>(m_animations.find(AnimationType::Rock)->second, size.x,
 					size.y, rock_radius));
+				++rock_count;
 			}
 
 			update_entities_and_delete_dead_ones();

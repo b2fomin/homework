@@ -78,7 +78,7 @@ private:
 			if (entity1->get_type() != EntityType::Asteroid) continue;
 			for (auto& entity2 : m_entities)
 			{
-				if (entity1 != entity2 && Entity::isCollide(entity1, entity2))
+				if (entity2->get_type()!=EntityType::Asteroid && Entity::isCollide(entity1, entity2))
 				{
 						m_collisions[entity1] = entity2;
 				}

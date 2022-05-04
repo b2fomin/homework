@@ -4,7 +4,7 @@ void Visualizer::initialize()
 {
 	m_image.create(m_calculator.width(), m_calculator.height());
 
-	if (!m_font.loadFromFile("consolas.ttf"))
+	if (!m_font.loadFromFile("task_1/consolas.ttf"))
 	{
 		std::cerr << "Font not found\n";
 	}
@@ -49,14 +49,26 @@ void Visualizer::review()
 
     while (m_window.pollEvent(event)) 
 	{
+		static sf::Keyboard::Key additional_key;
         switch (event.type) 
 		{
         case sf::Event::Closed:
             m_window.close();
             break;
+		case sf::Event::KeyReleased:
+			additional_key = sf::Keyboard::Unknown;
+			break;
         case sf::Event::KeyPressed:
             m_need_redraw = true;
-            handle_key_pressed(event.key.code);
+			if (event.key.code == sf::Keyboard::LShift ||
+				event.key.code == sf::Keyboard::RShift ||
+				event.key.code == sf::Keyboard::LControl ||
+				event.key.code == sf::Keyboard::RControl)
+				additional_key = event.key.code;
+			else
+			{
+				handle_key_pressed(event.key.code, additional_key);
+			}
             break;
         default:
             break;
@@ -64,7 +76,7 @@ void Visualizer::review()
     }
 }
 
-void Visualizer::handle_key_pressed(sf::Keyboard::Key code)
+void Visualizer::handle_key_pressed(sf::Keyboard::Key code, sf::Keyboard::Key& additional_key)
 {
     const auto offset_x = m_view.width()  / 10.0f;
 	const auto offset_y = m_view.height() / 10.0f;
@@ -85,15 +97,25 @@ void Visualizer::handle_key_pressed(sf::Keyboard::Key code)
     case sf::Keyboard::Up:
         m_view.move(sf::Vector2f(0.0f, -offset_y));
         break;
+	case sf::Keyboard::Equal:
+		if (!(additional_key == sf::Keyboard::LShift ||
+			additional_key == sf::Keyboard::RShift))
+			break;
 	case sf::Keyboard::Add:
         m_view.scale(1.0f / factor);
         break;
+	case sf::Keyboard::Dash:
+		if (!(additional_key == sf::Keyboard::LShift ||
+			additional_key == sf::Keyboard::RShift))
+			break;
     case sf::Keyboard::Subtract:
         m_view.scale(factor);
         break;
     default:
         break;
     }
+
+	additional_key = sf::Keyboard::Unknown;
 }
 
 void Visualizer::update()

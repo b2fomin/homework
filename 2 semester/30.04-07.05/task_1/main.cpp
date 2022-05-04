@@ -9,7 +9,7 @@ int main(int argc, char ** argv)
 {
     try 
 	{
-        Visualizer visualizer;
+		Visualizer visualizer{ 1000, 1000, std::complex<float>{-0.2, 0.75} };
 
 		visualizer.run();
     }

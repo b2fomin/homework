@@ -13,9 +13,9 @@ class Visualizer
 {
 public:
 
-	Visualizer() :
-		m_window(sf::VideoMode(1000U, 1000U), "MANDELBROT VISUALIZER", sf::Style::Close),
-		m_calculator(m_window.getSize().x, m_window.getSize().y, 100U), m_need_redraw(true),
+	Visualizer(std::size_t width, std::size_t height, std::complex<float> c) :
+		m_window(sf::VideoMode(width, height), "MANDELBROT VISUALIZER", sf::Style::Close),
+		m_calculator(m_window.getSize().x, m_window.getSize().y, 100U, c), m_need_redraw(true),
 		m_view(sf::Vector2f(0.0f, 0.0f), 6.0f, 6.0f / (m_calculator.width() / m_calculator.height()))
 	{
 		initialize();
@@ -39,7 +39,7 @@ private:
 
 private:
 
-    void handle_key_pressed(sf::Keyboard::Key code);
+    void handle_key_pressed(sf::Keyboard::Key, sf::Keyboard::Key&);
 
 private:
 

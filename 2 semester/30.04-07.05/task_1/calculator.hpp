@@ -15,8 +15,8 @@ public:
 
 public:
 
-    explicit Calculator(std::size_t width, std::size_t height, std::size_t max_iterations) :
-		m_width(width), m_height(height), m_max_iterations(max_iterations)
+    explicit Calculator(std::size_t width, std::size_t height, std::size_t max_iterations, std::complex<float> c) :
+		m_width(width), m_height(height), m_max_iterations(max_iterations), c{c}
 	{
 		initialize();
 	}
@@ -61,4 +61,6 @@ private:
     std::size_t m_max_iterations;
 
 	field_t m_field;
+
+	std::complex<float> c;
 };

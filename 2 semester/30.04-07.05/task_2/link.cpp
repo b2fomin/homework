@@ -3,7 +3,10 @@
 void Link::update() const
 {
 	const auto delta = m_particle_2->position() - m_particle_1->position();
+	const float A = 0.01f;
 
-	m_particle_1->move(norm(delta) * (length(delta) - m_distance) * m_stiffness);
-	m_particle_2->move(norm(delta) * (length(delta) - m_distance) * m_stiffness * -1.0f);
+	auto force = norm(delta) * static_cast<float>(A * (length(delta)-m_distance));
+
+	m_particle_1->move(force);
+	m_particle_2->move(-force);
 }

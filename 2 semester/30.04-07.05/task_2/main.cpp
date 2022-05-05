@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 	std::vector < System::particle_t > particles;
 
 	auto reverse = true;
-	for (auto x = -width / 2; x < width / 2; x += d)
+	for (auto x = -width / 2; x <= width / 2; x += d)
 	{
 		reverse = !reverse;
 
@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 		{
 			auto position = sf::Vector2f(x, reverse ? -y : y) + C;
 			particles.push_back(std::make_shared < Particle >(position, position,
-				sf::Vector2f(0.0f, 0.0f), r));
+				sf::Vector2f(0.0f, 10.0f), r));
 		}
 	}
 

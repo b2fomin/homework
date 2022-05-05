@@ -6,7 +6,8 @@ void System::initialize()
 
 	for (auto i = 0U; i < size; ++i)
 	{
-		m_links.push_back(Link(particle(i), particle((i + 1) % size), 0.5f));
+		for (auto j=i+1;j<size;++j)
+		m_links.push_back(Link(particle(i), particle(j), 0.5f));
 	}
 }
 
@@ -49,6 +50,4 @@ void System::update() const
 	{
 		m_links[i].update();
 	}
-
-	m_pressure.update();
 }

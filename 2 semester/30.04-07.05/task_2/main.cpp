@@ -6,31 +6,36 @@
 #include "functions.hpp"
 #include "system.hpp"
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
 	sf::RenderWindow window(sf::VideoMode(800U, 600U), "PHYSICS");
 
-	sf::Vector2f min_point(  0.0f,   0.0f);
+	window.setFramerateLimit(60);
+
+	sf::Vector2f min_point(0.0f, 0.0f);
 	sf::Vector2f max_point(775.0f, 575.0f);
 
-	const auto N = 50U;
+	constexpr auto d = 50.f;
 
-	const auto R = length(max_point - min_point) * 0.1f;
+	constexpr auto width = 200.f, height = width;
 
-	const auto C = (min_point + max_point) * 0.5f;
+	const sf::Vector2f C = (min_point + max_point) * 0.5f;
 
-	const auto r = 2.5f;
+	constexpr auto r = 2.5f;
 
 	std::vector < System::particle_t > particles;
 
-	for (auto i = 0U; i < N; ++i)
+	auto reverse = true;
+	for (auto x = -width / 2; x < width / 2; x += d)
 	{
-		auto angle = 2.0f * 3.141593f / N * i;
+		reverse = !reverse;
 
-		auto position = sf::Vector2f(std::cos(angle), std::sin(angle)) * R + C;
-
-		particles.push_back(std::make_shared < Particle > (position, position,
-			sf::Vector2f(0.0f, 10.0f), r));
+		for (auto y = -height / 2; y <= height / 2; y += d)
+		{
+			auto position = sf::Vector2f(x, reverse ? -y : y) + C;
+			particles.push_back(std::make_shared < Particle >(position, position,
+				sf::Vector2f(0.0f, 0.0f), r));
+		}
 	}
 
 	System system(min_point, max_point, particles);
@@ -70,7 +75,7 @@ int main(int argc, char ** argv)
 		}
 
 		window.clear();
-		
+
 		for (auto i = 0U; i < system.particles().size(); ++i)
 		{
 			sf::CircleShape circle(2.0f * r);
@@ -81,10 +86,10 @@ int main(int argc, char ** argv)
 
 			window.draw(circle);
 		}
-	
+
 		window.display();
 	}
-	
+
 	// system("pause");
 
 	return EXIT_SUCCESS;
